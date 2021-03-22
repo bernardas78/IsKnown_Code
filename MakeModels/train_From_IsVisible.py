@@ -110,7 +110,7 @@ def trainModel(epochs,
     f_make_iterator = lambda data_folder: data_gen.flow_from_directory(
         directory=data_folder,
         target_size=(target_size, target_size),
-        batch_size=128,
+        batch_size=Glb.batch_size ,
         shuffle=False,
         class_mode='categorical')
     train_iterator = f_make_iterator(train_data_folder)
