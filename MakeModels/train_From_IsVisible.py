@@ -25,7 +25,8 @@ from globalvars import Glb
 def trainModel(epochs,
                isvisible_model_version,
                hier_lvl,
-               aff_aug_lvl,
+               #aff_aug_lvl,
+               emptyness_prefix,
                val_acc_name,
                model_id):
     # Trains a model
@@ -36,15 +37,17 @@ def trainModel(epochs,
 
 
     # model file
-    model_file_name = os.path.join (Glb.results_folder, "model_isvisible_v{}_aff{}_Ind-{}_model{}_{}.h5".format(isvisible_model_version, aff_aug_lvl, hier_lvl, model_id, date.today().strftime("%Y%m%d") ) )
+    #model_file_name = os.path.join (Glb.results_folder, "model_isvisible_v{}_aff{}_Ind-{}_model{}_{}.h5".format(isvisible_model_version, aff_aug_lvl, hier_lvl, model_id, date.today().strftime("%Y%m%d") ) )
+    model_file_name = os.path.join (Glb.results_folder, "model_empty{}_isvisible_v{}_model{}_{}.h5".format(emptyness_prefix, isvisible_model_version, model_id, date.today().strftime("%Y%m%d") ) )
 
     # learning curve file
-    lc_file_name = os.path.join (Glb.results_folder, "lc_isvisible_v{}_aff{}_Ind-{}_model{}_{}.csv".format(isvisible_model_version, aff_aug_lvl, hier_lvl, model_id, date.today().strftime("%Y%m%d") ) )
+    lc_file_name = os.path.join (Glb.results_folder, "lc_empty{}_isvisible_v{}_model{}_{}.csv".format(emptyness_prefix, isvisible_model_version, model_id, date.today().strftime("%Y%m%d") ) )
 
     metrics_file_name = os.path.join (Glb.results_folder, "metrics.csv" )
 
     # data folder
-    data_folder = os.path.join (Glb.images_folder, "affAug{}_v{}".format(aff_aug_lvl,isvisible_model_version), "Ind-{}".format (hier_lvl) )
+    data_folder = os.path.join (Glb.images_folder, "{}_v{}".format(emptyness_prefix,isvisible_model_version), "Ind-{}".format (hier_lvl) )
+    #data_folder = os.path.join (Glb.images_folder, "affAug{}_v{}".format(aff_aug_lvl,isvisible_model_version), "Ind-{}".format (hier_lvl) )
     #data_folder = os.path.join (Glb.images_folder, "affAug{}_v{}_small".format(aff_aug_lvl,isvisible_model_version), "Ind-{}".format (hier_lvl) )
 
 
