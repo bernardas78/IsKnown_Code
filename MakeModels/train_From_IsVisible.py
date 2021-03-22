@@ -59,44 +59,44 @@ def trainModel(epochs,
     target_size = 224
 
     #data_gen = ImageDataGenerator(rescale=1. / 255)
-    #data_gen = ImageDataGenerator(preprocessing_function = resnet_preprocess_input)
+    data_gen = ImageDataGenerator(preprocessing_function = resnet_preprocess_input)
     #data_gen = ImageDataGenerator()
 
-    f_make_ds = lambda data_folder: tf.keras.preprocessing.image_dataset_from_directory(
-        data_folder,
-        #validation_split=0.2,
-        #subset="training",
-        label_mode="categorical",
-        seed=123,
-        image_size=(target_size, target_size),
-        batch_size=Glb.batch_size )
-    train_ds = f_make_ds(train_data_folder)
-    val_ds = f_make_ds(val_data_folder)
-    test_ds = f_make_ds(test_data_folder)
+    #f_make_ds = lambda data_folder: tf.keras.preprocessing.image_dataset_from_directory(
+    #    data_folder,
+    #    #validation_split=0.2,
+    #    #subset="training",
+    #    label_mode="categorical",
+    #    seed=123,
+    #    image_size=(target_size, target_size),
+    #    batch_size=Glb.batch_size )
+    #train_ds = f_make_ds(train_data_folder)
+    #val_ds = f_make_ds(val_data_folder)
+    #test_ds = f_make_ds(test_data_folder)
 
-    Softmax_size = len(train_ds.class_names)
+    #Softmax_size = len(train_ds.class_names)
 
-    AUTOTUNE = tf.data.AUTOTUNE
-    train_ds = train_ds.cache( os.path.join( Glb.cache_folder, 'cache_train.bin') ).prefetch(buffer_size=AUTOTUNE)
-    val_ds = val_ds.cache( os.path.join( Glb.cache_folder, 'cache_val.bin') ).prefetch(buffer_size=AUTOTUNE)
+    #AUTOTUNE = tf.data.AUTOTUNE
+    #train_ds = train_ds.cache( os.path.join( Glb.cache_folder, 'cache_train.bin') ).prefetch(buffer_size=AUTOTUNE)
+    #val_ds = val_ds.cache( os.path.join( Glb.cache_folder, 'cache_val.bin') ).prefetch(buffer_size=AUTOTUNE)
     #train_ds = train_ds.prefetch(buffer_size=AUTOTUNE)
     #val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
 
-    resnet_preprocess_value = np.zeros( (1,target_size,target_size,3), dtype=np.float32)
-    resnet_preprocess_value[:,:,:,0] = -103.939
-    resnet_preprocess_value[:,:,:,1] = -116.779
-    resnet_preprocess_value[:,:,:,2] = -123.68
-    resnet_preprocess_tensor = tf.constant (resnet_preprocess_value, tf.float32)
+    #resnet_preprocess_value = np.zeros( (1,target_size,target_size,3), dtype=np.float32)
+    #resnet_preprocess_value[:,:,:,0] = -103.939
+    #resnet_preprocess_value[:,:,:,1] = -116.779
+    #resnet_preprocess_value[:,:,:,2] = -123.68
+    #resnet_preprocess_tensor = tf.constant (resnet_preprocess_value, tf.float32)
 
-    # Throws OOM after a few epoxhs, so commenting out
-    resnet_preprocess_fun = lambda  x: tf.math.add(tf.reverse(x,axis=[3]),resnet_preprocess_tensor)
-    #resnet_preprocess_fun = resnet_preprocess_input
+    ## Throws OOM after a few epoxhs, so commenting out
+    #resnet_preprocess_fun = lambda  x: tf.math.add(tf.reverse(x,axis=[3]),resnet_preprocess_tensor)
+    ##resnet_preprocess_fun = resnet_preprocess_input
 
 
-    preprocess_fun_full = lambda x, y: (resnet_preprocess_fun(x), y)
-    train_iterator = train_ds.map(preprocess_fun_full)
-    val_iterator = val_ds.map(preprocess_fun_full)
-    test_iterator = test_ds.map(preprocess_fun_full)
+    #preprocess_fun_full = lambda x, y: (resnet_preprocess_fun(x), y)
+    #train_iterator = train_ds.map(preprocess_fun_full)
+    #val_iterator = val_ds.map(preprocess_fun_full)
+    #test_iterator = test_ds.map(preprocess_fun_full)
 
     #train_iterator = train_ds.map(lambda x, y: (resnet_preprocess_input(x), y))
     #val_iterator = val_ds.map(lambda x, y: (resnet_preprocess_input(x), y))
@@ -107,19 +107,17 @@ def trainModel(epochs,
     #train_iterator = train_ds.map(lambda x, y: (x,y))
     #val_iterator = val_ds.map(lambda x, y: (x,y))
 
-    #f_make_iterator = lambda data_folder: data_gen.flow_from_directory(
-    #    directory=data_folder,
-    #    target_size=(target_size, target_size),
-    #    batch_size=128,
-    #    shuffle=False,
-    #    class_mode='categorical')
-    #train_iterator = f_make_iterator(train_data_folder)
-    #val_iterator = f_make_iterator(val_data_folder)
-    #test_iterator = f_make_iterator(test_data_folder)
+    f_make_iterator = lambda data_folder: data_gen.flow_from_directory(
+        directory=data_folder,
+        target_size=(target_size, target_size),
+        batch_size=128,
+        shuffle=False,
+        class_mode='categorical')
+    train_iterator = f_make_iterator(train_data_folder)
+    val_iterator = f_make_iterator(val_data_folder)
+    test_iterator = f_make_iterator(test_data_folder)
 
-    #Softmax_size = len(test_iterator.class_indices)
-
-    #model = makeModel_is_visible.prepModel(target_size=target_size, Softmax_size=Softmax_size)
+    Softmax_size = len(test_iterator.class_indices)
 
     if epochs==0:
         model = load_model ( model_file_name)
