@@ -69,7 +69,7 @@ def trainModel(epochs,
         label_mode="categorical",
         seed=123,
         image_size=(target_size, target_size),
-        batch_size=64)
+        batch_size=1024)
     train_ds = f_make_ds(train_data_folder)
     val_ds = f_make_ds(val_data_folder)
     test_ds = f_make_ds(test_data_folder)
@@ -77,18 +77,20 @@ def trainModel(epochs,
     Softmax_size = len(train_ds.class_names)
 
     AUTOTUNE = tf.data.AUTOTUNE
-    train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
-    val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+    train_ds = train_ds.cache( os.path.join( Glb.cache_folder, 'cache_train.bin') ).prefetch(buffer_size=AUTOTUNE)
+    val_ds = val_ds.cache( os.path.join( Glb.cache_folder, 'cache_val.bin') ).prefetch(buffer_size=AUTOTUNE)
+    #train_ds = train_ds.prefetch(buffer_size=AUTOTUNE)
+    #val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
 
-    #resnet_preprocess_value = np.zeros( (1,target_size,target_size,3), dtype=np.float32)
-    #resnet_preprocess_value[:,:,:,0] = -103.939
-    #resnet_preprocess_value[:,:,:,1] = -116.779
-    #resnet_preprocess_value[:,:,:,2] = -123.68
-    #resnet_preprocess_tensor = tf.constant (resnet_preprocess_value, tf.float32)
+    resnet_preprocess_value = np.zeros( (1,target_size,target_size,3), dtype=np.float32)
+    resnet_preprocess_value[:,:,:,0] = -103.939
+    resnet_preprocess_value[:,:,:,1] = -116.779
+    resnet_preprocess_value[:,:,:,2] = -123.68
+    resnet_preprocess_tensor = tf.constant (resnet_preprocess_value, tf.float32)
 
     # Throws OOM after a few epoxhs, so commenting out
-    #resnet_preprocess_fun = lambda  x: tf.math.add(tf.reverse(x,axis=[3]),resnet_preprocess_tensor)
-    resnet_preprocess_fun = resnet_preprocess_input
+    resnet_preprocess_fun = lambda  x: tf.math.add(tf.reverse(x,axis=[3]),resnet_preprocess_tensor)
+    #resnet_preprocess_fun = resnet_preprocess_input
 
 
     preprocess_fun_full = lambda x, y: (resnet_preprocess_fun(x), y)
@@ -131,12 +133,16 @@ def trainModel(epochs,
         callback_csv_logger = CSVLogger(lc_file_name, separator=",", append=False)
 
         mcp_save = ModelCheckpoint(model_file_name, save_best_only=True, monitor=val_acc_name, mode='max')
-        tb_callback = TensorBoard(log_dir=Glb.tensorboard_logs_folder, profile_batch=(4,8) )
+        #tb_callback = TensorBoard(log_dir=Glb.tensorboard_logs_folder, profile_batch=(4,8) )
 
-        model.fit(train_iterator, steps_per_epoch=len(train_iterator),
-                  validation_data=val_iterator, validation_steps=len(val_iterator),
+        steps_per_train_epoch = len(train_iterator)
+        steps_per_val_epoch = len(val_iterator)
+
+        print ("Starting fit()")
+        model.fit(train_iterator, steps_per_epoch=steps_per_train_epoch,
+                  validation_data=val_iterator, validation_steps=steps_per_val_epoch,
                   epochs=epochs, verbose=2,
-                  callbacks=[callback_earlystop, mcp_save, callback_csv_logger, tb_callback])
+                  callbacks=[callback_earlystop, mcp_save, callback_csv_logger])    #, tb_callback
 
     # Loading best saved model (for python 3.6 and older keras only)
     #model_file_name = "A:\\IsKnown_Results\\model_isvisible_v14_Ind-0_20210109.h5"
