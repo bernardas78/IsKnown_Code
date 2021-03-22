@@ -69,7 +69,7 @@ def trainModel(epochs,
         label_mode="categorical",
         seed=123,
         image_size=(target_size, target_size),
-        batch_size=1024)
+        batch_size=Glb.batch_size )
     train_ds = f_make_ds(train_data_folder)
     val_ds = f_make_ds(val_data_folder)
     test_ds = f_make_ds(test_data_folder)

@@ -1,8 +1,8 @@
 import train_From_IsVisible as t
 import os
 
-#os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-#os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 for model_id in range(1):
   t.trainModel(

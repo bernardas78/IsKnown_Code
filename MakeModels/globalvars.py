@@ -8,8 +8,10 @@ class Glb:
         results_folder = '/home/bernardas/IsKnown_Results'
         tensorboard_logs_folder = '/home/bernardas/IsKnown_TBLogs'
         cache_folder = '/home/bernardas/IsKnown_Cache'
+        batch_size=256
     else:
         images_folder = 'C:/IsKnown_Images_IsVisible'
         results_folder = 'C:/IsKnown_Results'
         tensorboard_logs_folder = 'C:/IsKnown_TBLogs'
         cache_folder = 'C:/IsKnown_Cache'
+        batch_size = 1024
