@@ -4,8 +4,9 @@
 #from MakeModels import model_resnet as makeModel_resnet
 import model_resnet as makeModel_resnet
 
+import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger, TensorBoard
 from datetime import date
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess_input
 import os
@@ -44,6 +45,7 @@ def trainModel(epochs,
 
     # data folder
     data_folder = os.path.join (Glb.images_folder, "affAug{}_v{}".format(aff_aug_lvl,isvisible_model_version), "Ind-{}".format (hier_lvl) )
+    #data_folder = os.path.join (Glb.images_folder, "affAug{}_v{}_small".format(aff_aug_lvl,isvisible_model_version), "Ind-{}".format (hier_lvl) )
 
 
     train_data_folder = os.path.join (data_folder, "Train")
@@ -57,19 +59,63 @@ def trainModel(epochs,
     target_size = 224
 
     #data_gen = ImageDataGenerator(rescale=1. / 255)
-    data_gen = ImageDataGenerator(preprocessing_function = resnet_preprocess_input)
+    #data_gen = ImageDataGenerator(preprocessing_function = resnet_preprocess_input)
+    #data_gen = ImageDataGenerator()
 
-    f_make_iterator = lambda data_folder: data_gen.flow_from_directory(
-        directory=data_folder,
-        target_size=(target_size, target_size),
-        batch_size=32,
-        shuffle=False,
-        class_mode='categorical')
-    train_iterator = f_make_iterator(train_data_folder)
-    val_iterator = f_make_iterator(val_data_folder)
-    test_iterator = f_make_iterator(test_data_folder)
+    f_make_ds = lambda data_folder: tf.keras.preprocessing.image_dataset_from_directory(
+        data_folder,
+        #validation_split=0.2,
+        #subset="training",
+        label_mode="categorical",
+        seed=123,
+        image_size=(target_size, target_size),
+        batch_size=64)
+    train_ds = f_make_ds(train_data_folder)
+    val_ds = f_make_ds(val_data_folder)
+    test_ds = f_make_ds(test_data_folder)
 
-    Softmax_size = len(train_iterator.class_indices)
+    Softmax_size = len(train_ds.class_names)
+
+    AUTOTUNE = tf.data.AUTOTUNE
+    train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
+    val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
+    #resnet_preprocess_value = np.zeros( (1,target_size,target_size,3), dtype=np.float32)
+    #resnet_preprocess_value[:,:,:,0] = -103.939
+    #resnet_preprocess_value[:,:,:,1] = -116.779
+    #resnet_preprocess_value[:,:,:,2] = -123.68
+    #resnet_preprocess_tensor = tf.constant (resnet_preprocess_value, tf.float32)
+
+    # Throws OOM after a few epoxhs, so commenting out
+    #resnet_preprocess_fun = lambda  x: tf.math.add(tf.reverse(x,axis=[3]),resnet_preprocess_tensor)
+    resnet_preprocess_fun = resnet_preprocess_input
+
+
+    preprocess_fun_full = lambda x, y: (resnet_preprocess_fun(x), y)
+    train_iterator = train_ds.map(preprocess_fun_full)
+    val_iterator = val_ds.map(preprocess_fun_full)
+    test_iterator = test_ds.map(preprocess_fun_full)
+
+    #train_iterator = train_ds.map(lambda x, y: (resnet_preprocess_input(x), y))
+    #val_iterator = val_ds.map(lambda x, y: (resnet_preprocess_input(x), y))
+
+
+    #train_iterator = train_ds.map(lambda x, y: (tf.reverse(x,axis=3)+resnet_preprocess_value, y))
+    #val_iterator = val_ds.map(lambda x, y: (tf.reverse(x,axis=3)+resnet_preprocess_value, y))
+    #train_iterator = train_ds.map(lambda x, y: (x,y))
+    #val_iterator = val_ds.map(lambda x, y: (x,y))
+
+    #f_make_iterator = lambda data_folder: data_gen.flow_from_directory(
+    #    directory=data_folder,
+    #    target_size=(target_size, target_size),
+    #    batch_size=128,
+    #    shuffle=False,
+    #    class_mode='categorical')
+    #train_iterator = f_make_iterator(train_data_folder)
+    #val_iterator = f_make_iterator(val_data_folder)
+    #test_iterator = f_make_iterator(test_data_folder)
+
+    #Softmax_size = len(test_iterator.class_indices)
 
     #model = makeModel_is_visible.prepModel(target_size=target_size, Softmax_size=Softmax_size)
 
@@ -85,11 +131,12 @@ def trainModel(epochs,
         callback_csv_logger = CSVLogger(lc_file_name, separator=",", append=False)
 
         mcp_save = ModelCheckpoint(model_file_name, save_best_only=True, monitor=val_acc_name, mode='max')
+        tb_callback = TensorBoard(log_dir=Glb.tensorboard_logs_folder, profile_batch=(4,8) )
 
         model.fit(train_iterator, steps_per_epoch=len(train_iterator),
                   validation_data=val_iterator, validation_steps=len(val_iterator),
                   epochs=epochs, verbose=2,
-                  callbacks=[callback_earlystop, mcp_save, callback_csv_logger])
+                  callbacks=[callback_earlystop, mcp_save, callback_csv_logger, tb_callback])
 
     # Loading best saved model (for python 3.6 and older keras only)
     #model_file_name = "A:\\IsKnown_Results\\model_isvisible_v14_Ind-0_20210109.h5"
