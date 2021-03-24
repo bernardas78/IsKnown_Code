@@ -2,7 +2,7 @@
 #   src sample: A:\IsKnown_Images\Aff_NE_Balanced\v62\Ind-0\Train\18002\*.jpg
 #   dst sample: A:\IsKnown_Images\Aff_NE_Balanced_AffineAndKerasAugCombined\affAug30_v62\Ind-0\Train\18002\*.jpg
 
-$src_folder = 'A:\IsKnown_Images\Aff_NE_Balanced\v62'
+$src_folder = 'A:\IsKnown_Images\Aff_NE_Balanced_AffineAug'
 #$dest_folder = 'A:\IsKnown_Images\Aff_NE_Balanced_AffineAndKerasAugCombined'
 
 #$AffAugs = 10,20,30
@@ -16,7 +16,7 @@ foreach {
     #$trainvaltest = $_.FullName.Split('\')[-3]
     #$hier = $_.FullName.Split('\')[-4]
     #$ver = $_.FullName.Split('\')[-5]
-    $newfilename = $name_no_ext + '_KerAug.' + $_.Name.Split('.')[-1]    # add suffix "_A"
+    $newfilename = $name_no_ext + '_AffAug.' + $_.Name.Split('.')[-1]    # add suffix "_A"
 
     Rename-Item $_.FullName $newfilename
 

@@ -8,7 +8,11 @@ dest_folder_notempty = "A:\\IsKnown_Images\\Affine_EmptyNot\\Affine_NotEmpty\\"
 dest_folder_empty = "A:\\IsKnown_Images\\Affine_EmptyNot\\Affine_Empty\\"
 
 # model to load from
-model_path = r"A:\\IsKnown_Results\\model_emptyNot_20210223.h5"
+#model_path = r"A:\\IsKnown_Results\\model_emptyNot_20210222_Balanced.h5"
+model_path = r"A:\\IsKnown_Results\\model_emptyNot_20210222_NotEmptyUndersampled.h5"
+
+is_overfit = "Undersampled" in model_path
+is_notempty_thr = (1-0.9954367) if is_overfit else 0.5
 
 is_resnet = False
 
@@ -62,7 +66,7 @@ for img_file in img_file_lst:
     #print ("pred.shape:{}".format(pred.shape))
 
     # classes are [0:Empty; 1:NotEmpty]
-    is_notempty = pred[0, 1] > 0.5
+    is_notempty = pred[0, 1] > is_notempty_thr
     barcode, file_name_stripped = img_file.split("\\")[-2:]
 
     # Split to barcode folders only non-empty; place empty to 1 folder
@@ -78,7 +82,7 @@ for img_file in img_file_lst:
 
     shutil.copy(img_file, dest_fullname)
 
-    total_copied += 1 if pred[0,1] > 0.5 else 0
+    total_copied += 1 if is_notempty else 0
     loop_cntr +=1
 
     if loop_cntr%100==0:

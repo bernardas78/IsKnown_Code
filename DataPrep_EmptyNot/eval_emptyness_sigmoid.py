@@ -13,8 +13,8 @@ data_folder = "C:\\EmptyNot\\Val"
 #dest_folder_sigmoid = "A:\\IsKnown_Images\\EmptyNotDebug\\Sigmoid_Balanced\\"
 
 # model to load from
-model_path = r"A:\\IsKnown_Results\\model_emptyNot_20210222_NotEmptyUndersampled.h5"
-#model_path = r"A:\\IsKnown_Results\\model_emptyNot_20210222_Balanced.h5"
+#model_path = r"A:\\IsKnown_Results\\model_emptyNot_20210222_NotEmptyUndersampled.h5"
+model_path = r"A:\\IsKnown_Results\\model_emptyNot_20210222_Balanced.h5"
 is_resnet=False
 
 from tensorflow.keras.models import load_model

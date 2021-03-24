@@ -52,7 +52,7 @@ def augment_folder (src_classcode_lvl_folder, dest_classcode_lvl_folder, img_cnt
 
 
 
-# Loop structure v<ver>\[Hier-x]\[TrainValTest]\classcode and balance
+# Loop structure [Bal|Overfit|Siam]_v<ver>\[Hier-x]\[TrainValTest]\classcode and balance
 for ver_lvl in os.listdir(src_folder):
     ver_lvl_full_folder = os.path.join(src_folder,ver_lvl)
 

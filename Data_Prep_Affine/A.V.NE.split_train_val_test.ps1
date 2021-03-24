@@ -8,7 +8,7 @@ $pct_train=0.64
 $pct_val=0.16
 $pct_test=0.2
 
-# Expected structure: Cleaned_AutoVisible\v<version>\barcode\*.jpg
+# Expected structure: Cleaned_AutoVisible\[Bal|Overfit|Siam]_v<version>\barcode\*.jpg
 
 # For each version of Visible model
 Get-ChildItem $images_folder -Directory |
