@@ -161,9 +161,9 @@ def trainModel(epochs,
     test_metrics = model.evaluate_generator(test_iterator)
     print ("Test: {}".format(test_metrics))
 
-    column_names = ['isVisible_version','Ind-X','aff_aug_lvl','model_id', 'date_trained', 'val_acc', 'val_loss', 'test_acc', 'test_loss']
+    column_names = ['isVisible_version','Ind-X','model_id', 'date_trained', 'val_acc', 'val_loss', 'test_acc', 'test_loss']
     df_metrics = pd.DataFrame(columns=column_names,
-                                data=[np.hstack([isvisible_model_version, hier_lvl, aff_aug_lvl, model_id, date.today().strftime("%Y%m%d"),
+                                data=[np.hstack([isvisible_model_version, hier_lvl, model_id, date.today().strftime("%Y%m%d"),
                                                  val_metrics[1], val_metrics[0], test_metrics[1], test_metrics[0]])] )
     df_metrics.to_csv(metrics_file_name, index=False, header=True, mode='a')
 

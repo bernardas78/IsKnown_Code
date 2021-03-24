@@ -4,7 +4,7 @@ import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
-for model_id in range(1):
+for model_id in range(9):
   t.trainModel(
     epochs=100,
     isvisible_model_version=14,
