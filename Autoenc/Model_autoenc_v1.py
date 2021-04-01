@@ -32,7 +32,7 @@ def prepModel( **argv ):
 ## ENCODER
     # 1st - encoder
     #model.add(Convolution2D(8, (3,3), input_shape=input_shape, padding="same"))
-    x = Convolution2D(8, (3,3), input_shape=input_shape, padding="same")(input_img)
+    x = Convolution2D(6, (3,3), input_shape=input_shape, padding="same")(input_img)
     #if "c+1" in bn_layers:
     #    model.add (BatchNormalization())
     #model.add(Activation('relu'))
@@ -42,7 +42,7 @@ def prepModel( **argv ):
 
 # 2nd - encoder
     #model.add(Convolution2D(16, (3, 3), padding="same"))
-    x = Convolution2D(16, (3,3), padding="same")(x)
+    x = Convolution2D(8, (3,3), padding="same")(x)
     #if "c+2" in bn_layers:
     #    model.add (BatchNormalization())
     #model.add(Activation('relu'))
@@ -51,18 +51,24 @@ def prepModel( **argv ):
     x = MaxPooling2D(pool_size=(2, 2))(x)
 
     # 3rd - encoder
-    #model.add(Convolution2D(32, (3, 3), padding="same"))
-    #if "c+3" in bn_layers:
+    #model.add(Convolution2D(8, (3,3), input_shape=input_shape, padding="same"))
+    x = Convolution2D(16, (3,3), input_shape=input_shape, padding="same")(x)
+    #if "c+1" in bn_layers:
     #    model.add (BatchNormalization())
     #model.add(Activation('relu'))
+    x = Activation('relu')(x)
     #model.add(MaxPooling2D(pool_size=(2, 2)))
+    x = MaxPooling2D(pool_size=(2, 2))(x)
 
     # 4th - encoder
-    #model.add(Convolution2D(64, (3, 3), padding="same"))
-    #if "c+4" in bn_layers:
-    #    model.add(BatchNormalization())
+    #model.add(Convolution2D(8, (3,3), input_shape=input_shape, padding="same"))
+    x = Convolution2D(32, (3,3), input_shape=input_shape, padding="same")(x)
+    #if "c+1" in bn_layers:
+    #    model.add (BatchNormalization())
     #model.add(Activation('relu'))
+    x = Activation('relu')(x)
     #model.add(MaxPooling2D(pool_size=(2, 2)))
+    x = MaxPooling2D(pool_size=(2, 2))(x)
 
     # 5th - encoder
     #model.add(Convolution2D(128, (3, 3), padding="same"))
@@ -89,23 +95,25 @@ def prepModel( **argv ):
 
 
     # -4th decoder
-    #model.add(UpSampling2D(size=(2, 2)))
-    #model.add(Convolution2D(64, (3, 3), padding="same"))
-    #if "c+4" in bn_layers:
+    # model.add(Conv2DTranspose(16, (3, 3), strides=(2,2), padding="same"))
+    x = Conv2DTranspose(16, (3, 3), strides=(2, 2), padding="same")(x)
+    # if "c+2" in bn_layers:
     #    model.add(BatchNormalization())
-    #model.add(Activation('relu'))
+    # model.add(Activation('relu'))
+    x = Activation('relu')(x)
+
 
     # -3rd decoder
-    #model.add(UpSampling2D(size=(2, 2)))
-    #model.add(Convolution2D(32, (3, 3), padding="same"))
-    #if "c+3" in bn_layers:
+    # model.add(Conv2DTranspose(16, (3, 3), strides=(2,2), padding="same"))
+    x = Conv2DTranspose(8, (3, 3), strides=(2, 2), padding="same")(x)
+    # if "c+2" in bn_layers:
     #    model.add(BatchNormalization())
-    #model.add(Activation('relu'))
-
+    # model.add(Activation('relu'))
+    x = Activation('relu')(x)
 
     # -2nd decoder
     #model.add(Conv2DTranspose(16, (3, 3), strides=(2,2), padding="same"))
-    x = Conv2DTranspose(16, (3, 3), strides=(2,2), padding="same")(x)
+    x = Conv2DTranspose(6, (3, 3), strides=(2,2), padding="same")(x)
     #if "c+2" in bn_layers:
     #    model.add(BatchNormalization())
     #model.add(Activation('relu'))

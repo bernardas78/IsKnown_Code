@@ -10,6 +10,8 @@ import os
 import numpy as np
 from affSequence import affSequence
 
+glb_aff_variation=20
+
 #src_folder = r"A:\IsKnown_Images\A_Hier"
 src_folder = r"A:\IsKnown_Images\Aff_NE_Hier"
 
@@ -27,7 +29,7 @@ def augment_folder (src_classcode_lvl_folder, dest_classcode_lvl_folder, img_cnt
     #    zoom_range=0.1,
     #    horizontal_flip=True
     #)
-    datagen=affSequence(variation=20)
+    datagen=affSequence(variation=glb_aff_variation)
 
     # First, copy original files to dest
     print ("Copying original files in {}".format (src_classcode_lvl_folder) )

@@ -12,11 +12,12 @@ $cntr = 0
 Get-ChildItem $src_folder -Recurse -File -Filter "202*" |   #only rename unaugmented files which start with date; augmented filenames are unique
 foreach {
     $name_no_ext = [io.path]::GetFileNameWithoutExtension( $_.Name)
-    #$barcode = $_.FullName.Split('\')[-2]
-    #$trainvaltest = $_.FullName.Split('\')[-3]
-    #$hier = $_.FullName.Split('\')[-4]
-    #$ver = $_.FullName.Split('\')[-5]
-    $newfilename = $name_no_ext + '_AffAug.' + $_.Name.Split('.')[-1]    # add suffix "_A"
+
+    #newname include affAug level; expected str: \AffAug10\{emptness}_v{visibility}\Ind-Hier\[Train|Val|Test]\{barcode}\name
+    $augLvl = $_.FullName.Split('\')[-6]
+
+    $newfilename = $name_no_ext + '_' + $augLvl + '.' + $_.Name.Split('.')[-1]    # add suffix "_A"
+    #echo $newfilename
 
     Rename-Item $_.FullName $newfilename
 

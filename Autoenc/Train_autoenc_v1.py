@@ -110,4 +110,4 @@ def trainModel(epochs): #,bn_layers, target_size, version):
 
     return model
 
-trainModel(epochs=1)
+trainModel(epochs=100)
