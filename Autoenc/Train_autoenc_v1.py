@@ -1,17 +1,10 @@
 from Autoenc import Model_autoenc_v1 as m_autoenc_v1
-from tensorflow.keras.callbacks import EarlyStopping, CSVLogger
+from tensorflow.keras.callbacks import EarlyStopping, CSVLogger, ModelCheckpoint
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from datetime import date
+import os
 
-#modelVersions_dic = {
-#    "Model_6classes_c4_d3_v1": m_6classes_c4_d3_v1.prepModel,
-#    "Model_6classes_c5_d2_v1": m_6classes_c5_d2_v1.prepModel,
-#    "Model_6classes_c5_d3_v1": m_6classes_c5_d3_v1.prepModel,
-#    "Model_6classes_c6_d2_v1": m_6classes_c6_d2_v1.prepModel,
-#    "Model_6classes_c5plus_d3_v1": m_6classes_c5plus_d3_v1.prepModel
-#}
-
-def trainModel(epochs): #,bn_layers, target_size, version):
+def trainModel(epochs):
 
     # Trains a model
     #   model = optional parameter; creates new if not passed; otherwise keeps training
@@ -31,82 +24,54 @@ def trainModel(epochs): #,bn_layers, target_size, version):
     # To call:
     #   model = Train_v1.trainModel(epochs=20)
 
+    model_file_name = "A:\\IsKnown_Results\\model_autoenc_{}.h5".format( date.today().strftime("%Y%m%d") )
+
     crop_range = 1  # number of pixels to crop image (if size is 235, crops are 0-223, 1-224, ... 11-234)
     target_size = 256
     batch_size = 32
     #datasrc = "visible"
 
-    # Manually copied to C: to speed up training
-    data_dir_train = r"C:\AutoEnc_ImgsTmp"
-    #data_dir_val = r"C:\TrainAndVal_6classes\Val"
+    # Balanced dataset
+    data_dir = "C:\\IsKnown_Images_IsVisible\\Bal_v14\\Ind-0"
+
+    # Unbalanced dataset
+    #data_dir = r"C:\AutoEnc_ImgsTmp\Bal_v14\Ind-0"
+
+    data_dir_train = os.path.join ( data_dir, "Train" )
+    data_dir_val = os.path.join ( data_dir, "Val" )
+
     #data_dir_6classes_test = r"C:\TrainAndVal_6classes\Test"
     #data_dir_6classes_train = r"D:\Visible_Data\4.Augmented\Train"
     #data_dir_6classes_val = r"D:\Visible_Data\4.Augmented\Val"
 
     # define train and validation sets
-    trainValDataGen = ImageDataGenerator(
-        #rotation_range=5, #15, #10,
-        #width_shift_range=16, #48, #32,
-        #height_shift_range=16, #48, #32,
-        # brightness_range=[0.,2.],
-        #zoom_range=0.05, #0.15, #0.1,
-        #horizontal_flip=True,
+    dataGen = ImageDataGenerator(
         rescale=1./255
     )
-    train_iterator = trainValDataGen.flow_from_directory(
-        directory=data_dir_train,
+    f_make_iter = lambda data_dir : dataGen.flow_from_directory(
+        directory=data_dir,
         target_size=(target_size, target_size),
         batch_size=batch_size,
         shuffle=True,
         class_mode='input')
 
-    #val_iterator = trainValDataGen.flow_from_directory(
-    #    directory=data_dir_6classes_val,
-    #    target_size=(target_size, target_size),
-    #    batch_size=batch_size,
-    #    shuffle=True,
-    #    class_mode='input')
-
-    #trainDataGen = s_6classes_v1.AugSequence(crop_range=crop_range, allow_hor_flip=False, target_size=target_size, batch_size=32,
-    #                            subtractMean=0.0, preprocess="div255",
-    #                            test=False, shuffle=True, datasrc=datasrc, debug=False)
-
+    train_iterator = f_make_iter ( data_dir_train )
+    val_iterator = f_make_iter ( data_dir_val )
 
     # Create model
-    prepModel = m_autoenc_v1.prepModel  #modelVersions_dic[architecture]
+    prepModel_autoenc = m_autoenc_v1.prepModel_autoenc
     prep_model_params = {
         "input_shape": (target_size,target_size,3),
-        #"bn_layers": bn_layers,
-        #"dropout_layers": dropout_layers,
-        #"l2_layers": l2_layers,
-        #"padding": padding,
-        #"dense_sizes": dense_sizes,
-        #"conv_layers_over_5": conv_layers_over_5,
-        #"use_maxpool_after_conv_layers_after_5th": use_maxpool_after_conv_layers_after_5th
     }
-    model = prepModel (**prep_model_params)
-    #model = m_6classes_c4_d3_v1.prepModel( input_shape=(target_size,target_size,3),
-    #                                       bn_layers=bn_layers, dropout_layers=dropout_layers, l2_layers=l2_layers,
-    #                                       padding=padding, dense_sizes=dense_sizes )
-    #print (model.summary())
+    model = prepModel_autoenc (**prep_model_params)
 
-    # prepare a validation data generator, used for early stopping
-    # vldDataGen = dg_v1.prepDataGen( target_size=target_size, test=True, batch_size=128, datasrc=datasrc )
-
-    callback_earlystop = EarlyStopping(monitor='val_accuracy', min_delta=0.0001, patience=20, verbose=1, mode='max',
-                                       restore_best_weights=True)
+    callback_earlystop = EarlyStopping(monitor='val_loss', min_delta=1e-7, patience=20, verbose=1, mode='min', restore_best_weights=True)
     callback_csv_logger = CSVLogger('A:/IsKnown_results/lc_autoenc_{}.csv'.format(date.today().strftime("%Y%m%d")), separator=",", append=False)
+    mcp_save = ModelCheckpoint(model_file_name, save_best_only=True, monitor='val_loss', mode='min')
 
-
-    # full epoch is 12x12 = 144 passes over data: 1 times for each subframe
-    # model.fit_generator ( dataGen, steps_per_epoch=len(dataGen), epochs=epochs, verbose=2 )
-
-    model.fit_generator(train_iterator, steps_per_epoch=len(train_iterator), epochs=epochs, verbose=2,
-                        #validation_data=val_iterator, validation_steps=len(val_iterator),
-                        callbacks=[callback_csv_logger]) #callback_earlystop
-
-    model_file_name = "A:\\IsKnown_Results\\model_autoenc_{}.h5".format( date.today().strftime("%Y%m%d") )
-    model.save(model_file_name)
+    model.fit(train_iterator, steps_per_epoch=len(train_iterator), epochs=epochs, verbose=2,
+                        validation_data=val_iterator, validation_steps=len(val_iterator),
+                        callbacks=[callback_csv_logger, callback_earlystop, mcp_save])
 
     return model
 
