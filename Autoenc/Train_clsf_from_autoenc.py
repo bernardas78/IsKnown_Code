@@ -6,8 +6,8 @@ from tensorflow.keras.callbacks import EarlyStopping, CSVLogger, ModelCheckpoint
 from datetime import date
 import os
 
-autoenc_file_path = "A:\\IsKnown_Results\\model_autoenc_20210402.h5"
-model_file_name = "A:\\IsKnown_Results\\model_clsf_from_autoenc_20210402.h5"
+autoenc_file_path = "A:\\IsKnown_Results\\model_autoenc_20210403.h5"
+model_file_name = "A:\\IsKnown_Results\\model_clsf_from_autoenc_{}.h5".format( date.today().strftime("%Y%m%d") )
 
 data_path = "C:\\IsKnown_Images_IsVisible\\Bal_v14\\Ind-0"
 
@@ -62,7 +62,7 @@ for l1,l2 in zip(model_clsf.layers[:flat_layer_ind],autoenc.layers[0:flat_layer_
 
 
 # vldDataGen = dg_v1.prepDataGen( target_size=target_size, test=True, batch_size=128, datasrc=datasrc )
-callback_earlystop = EarlyStopping(monitor='val_accuracy', min_delta=0.0001, patience=20, verbose=1, mode='max',
+callback_earlystop = EarlyStopping(monitor='val_accuracy', min_delta=0.0001, patience=5, verbose=1, mode='max',
                                        restore_best_weights=True)
 callback_csv_logger = CSVLogger('A:/IsKnown_results/lc_clsf_from_autoenc_{}.csv'.format(date.today().strftime("%Y%m%d")), separator=",", append=False)
 
@@ -73,10 +73,10 @@ model_clsf.fit(train_iterator, steps_per_epoch=len(train_iterator), epochs=epoch
                 callbacks=[callback_csv_logger, callback_earlystop, mcp_save]) #
 
 print("Evaluation on test set (1 frame)")
-test_metrics = model_clsf.evaluate_generator(test_iterator)
+test_metrics = model_clsf.evaluate(test_iterator)
 print("Test: {}".format(test_metrics))
 
 print("Evaluation on validation set (1 frame)")
-val_metrics = model_clsf.evaluate_generator(val_iterator)
+val_metrics = model_clsf.evaluate(val_iterator)
 print("Val: {}".format(val_metrics))
 

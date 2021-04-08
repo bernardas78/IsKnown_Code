@@ -1,7 +1,7 @@
 # Prepares autoencoder and classifier-based-on-encoder architecture
 
 import tensorflow.keras.models
-from tensorflow.keras.layers import Convolution2D, MaxPooling2D, UpSampling2D, Activation, BatchNormalization, Flatten, Reshape, Conv2DTranspose, Input, Dense
+from tensorflow.keras.layers import Dropout, Convolution2D, MaxPooling2D, Activation, BatchNormalization, Flatten, Conv2DTranspose, Input, Dense
 
 ################################################
 #  Autoencoder stuff
@@ -27,18 +27,27 @@ def encoder (input_img):
     x = Activation('relu')(x)
     x = MaxPooling2D(pool_size=(2, 2))(x)
 
+    # 5th - encoder
+    x = Convolution2D(64, (3, 3), padding="same")(x)
+    x = Activation('relu')(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+
     # trivial layers: after Flatten - get activations
     #unflat_shape = x.shape[1:]
     #x = Flatten()(x)
 
     return x#, unflat_shape
 
-def decoder ( latent_img ): #, unflat_shape ):
+def decoder ( x ): #, unflat_shape ):
     #x = Reshape( unflat_shape )(flat_img)
     #x = Conv2DTranspose(16, (3, 3), strides=(2, 2), padding="same")(x)
 
+    # -5th decoder
+    x = Conv2DTranspose(32, (3, 3), strides=(2, 2), padding="same")(x)
+    x = Activation('relu')(x)
+
     # -4th decoder
-    x = Conv2DTranspose(16, (3, 3), strides=(2, 2), padding="same")(latent_img)
+    x = Conv2DTranspose(16, (3, 3), strides=(2, 2), padding="same")(x)
     x = Activation('relu')(x)
 
     # -3rd decoder
@@ -68,9 +77,13 @@ def prepModel_autoenc( **argv ):
 #  Classifier stuff
 ###############################################
 def fc (latent_img,softmax_size):
-    flat = Flatten() (latent_img)
-    den = Dense(128, activation='relu')(flat)
-    out = Dense(softmax_size, activation='softmax')(den)
+    x = Flatten() (latent_img)
+    x = Dense(1024, activation='relu')(x)
+    x = Dropout(rate=0.5)(x)
+    x = Dense(256, activation='relu')(x)
+    x = Dropout(rate=0.5)(x)
+
+    out = Dense(softmax_size, activation='softmax')(x)
     return out
 
 def prepModel_clsf( **argv ):

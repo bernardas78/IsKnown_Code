@@ -6,7 +6,7 @@ import os
 from PIL import Image
 import numpy as np
 
-model_file_path = "A:\\IsKnown_Results\\model_autoenc_20210402.h5"
+model_file_path = "A:\\IsKnown_Results\\model_autoenc_20210403.h5"
 data_path = "C:\\AutoEnc_ImgsTmp\\Bal_v14\\Ind-0\\Train\\18002"
 #autoenc_show_path = os.environ['GDRIVE'] + "\\PhD_Data\\IsKnow_ErrorAnalysis\\Autoenc"
 autoenc_show_path = "a:\\IsKnown_ErrorAnalysis\\Autoenc"
