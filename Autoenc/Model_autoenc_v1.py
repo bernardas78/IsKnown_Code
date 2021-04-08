@@ -73,26 +73,3 @@ def prepModel_autoenc( **argv ):
                   metrics=[])
     return model
 
-################################################
-#  Classifier stuff
-###############################################
-def fc (latent_img,softmax_size):
-    x = Flatten() (latent_img)
-    x = Dense(1024, activation='relu')(x)
-    x = Dropout(rate=0.5)(x)
-    x = Dense(256, activation='relu')(x)
-    x = Dropout(rate=0.5)(x)
-
-    out = Dense(softmax_size, activation='softmax')(x)
-    return out
-
-def prepModel_clsf( **argv ):
-    input_shape = argv["input_shape"]
-    softmax_size = argv["softmax_size"]
-    input_img = Input(shape=input_shape)
-    model = tensorflow.keras.Model(input_img, fc(encoder(input_img), softmax_size) )
-    print (model.summary())
-    model.compile(loss='categorical_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-    return model

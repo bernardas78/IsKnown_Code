@@ -4,17 +4,15 @@
 #from MakeModels import model_resnet as makeModel_resnet
 import model_resnet as makeModel_resnet
 
-import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger, TensorBoard
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger
 from datetime import date
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess_input
 import os
-import sys
 import numpy as np
 import pandas as pd
 from tensorflow.keras.models import load_model
-from globalvars import Glb
+from Globals.globalvars import Glb
 
 #isvisible_model_version = sys.argv[1]
 #hier_lvl = int(sys.argv[2]) # Hierarchy level: 0: ind. product "12345"; ...; 4: cateogory "1"
