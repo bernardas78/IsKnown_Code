@@ -1,38 +1,26 @@
 from Autoenc import Model_autoenc_v1 as m_autoenc_v1
+from Autoenc import Model_autoenc_v2_xtraconv as m_autoenc_v2
+from Autoenc import Model_autoenc_v3_bn as m_autoenc_v3
 from tensorflow.keras.callbacks import EarlyStopping, CSVLogger, ModelCheckpoint
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from datetime import date
 import os
+from Globals.globalvars import Glb
 
-def trainModel(epochs):
+def trainModel(**argv):
 
-    # Trains a model
-    #   model = optional parameter; creates new if not passed; otherwise keeps training
-    #   epochs - number of max epochs to train (subject to early stopping)
-    #   bn_layers - list of indexes of Dense layers (-1 and down) and CNN layers (1 and up) where Batch Norm should be applied
-    #   dropout_layers - list of indexes of Dense layers (-1 and down) where Dropout should be applied
-    #   bn_layers - list of indexes of Dense layers (-1 and down) where L2 regularization should be applied
-    #   padding - changed to "same" to keep 2^n feature map sizes
-    #   dense_sizes - dictionary of dense layer sizes (cnt of neurons)
-    #   architecture - one of:  Model_6classes_c4_d3_v1, Model_6classes_c5_d2_v1, Model_6classes_c5_d3_v1
-    #   conv_layers_over_5 - number of convolutional layers after 5th
-    #   use_maxpool_after_conv_layers_after_5th - list of boolean values whether to use maxpooling after 5th layer
-    #   version - used to name a learning curve file
-    # Returns:
-    #   model: trained Keras model
-    #
-    # To call:
-    #   model = Train_v1.trainModel(epochs=20)
+    autoenc_version = argv["autoenc_version"]
 
-    model_file_name = "A:\\IsKnown_Results\\model_autoenc_{}.h5".format( date.today().strftime("%Y%m%d") )
 
-    crop_range = 1  # number of pixels to crop image (if size is 235, crops are 0-223, 1-224, ... 11-234)
+    model_file_name = os.path.join(Glb.results_folder, "model_autoenc_{}_v{}.h5".format( date.today().strftime("%Y%m%d"), str(autoenc_version) ) )
+
+    epochs=100
     target_size = 256
     batch_size = 32
     #datasrc = "visible"
 
     # Balanced dataset
-    data_dir = "C:\\IsKnown_Images_IsVisible\\Bal_v14\\Ind-0"
+    data_dir = os.path.join(Glb.images_folder, "Bal_v14", "Ind-0")
 
     # Unbalanced dataset
     #data_dir = r"C:\AutoEnc_ImgsTmp\Bal_v14\Ind-0"
@@ -59,14 +47,23 @@ def trainModel(epochs):
     val_iterator = f_make_iter ( data_dir_val )
 
     # Create model
-    prepModel_autoenc = m_autoenc_v1.prepModel_autoenc
+    if autoenc_version == 1:
+        prepModel_autoenc = m_autoenc_v1.prepModel_autoenc
+    elif autoenc_version == 2:
+        prepModel_autoenc = m_autoenc_v2.prepModel_autoenc
+    elif autoenc_version == 3:
+        prepModel_autoenc = m_autoenc_v3.prepModel_autoenc
+    else:
+        raise Exception("Unknown autoenc_version. Train_autoenc_v1.py")
+
     prep_model_params = {
         "input_shape": (target_size,target_size,3),
     }
     model = prepModel_autoenc (**prep_model_params)
 
     callback_earlystop = EarlyStopping(monitor='val_loss', min_delta=1e-7, patience=20, verbose=1, mode='min', restore_best_weights=True)
-    callback_csv_logger = CSVLogger('A:/IsKnown_results/lc_autoenc_{}.csv'.format(date.today().strftime("%Y%m%d")), separator=",", append=False)
+    lc_filename = os.path.join(Glb.results_folder, 'lc_autoenc_{}.csv'.format(date.today().strftime("%Y%m%d")))
+    callback_csv_logger = CSVLogger(lc_filename, separator=",", append=False)
     mcp_save = ModelCheckpoint(model_file_name, save_best_only=True, monitor='val_loss', mode='min')
 
     model.fit(train_iterator, steps_per_epoch=len(train_iterator), epochs=epochs, verbose=2,
@@ -75,4 +72,3 @@ def trainModel(epochs):
 
     return model
 
-trainModel(epochs=100)
