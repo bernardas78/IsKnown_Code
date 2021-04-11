@@ -1,4 +1,4 @@
-import Model_autoenc_v1
+import Model_autoenc_v1, Model_autoenc_v2_xtraconv, Model_autoenc_v3_bn
 import tensorflow.keras.models
 from tensorflow.keras.layers import Dropout, Convolution2D, MaxPooling2D, Activation, BatchNormalization, Flatten, Conv2DTranspose, Input, Dense
 
@@ -27,6 +27,7 @@ def prepModel_clsf( **argv ):
     input_shape = argv["input_shape"]
     softmax_size = argv["softmax_size"]
     fc_version = argv["fc_version"]
+    autoenc_version = argv["autoenc_version"]
 
     if fc_version == 1:
         fc = fc_1
@@ -35,8 +36,17 @@ def prepModel_clsf( **argv ):
     else:
         raise Exception("Unknown fc_version. Model_clsf_from_autoenc.py")
 
+    if autoenc_version == 1:
+        Model_autoenc = Model_autoenc_v1
+    elif autoenc_version == 2:
+        Model_autoenc = Model_autoenc_v2_xtraconv
+    elif autoenc_version == 3:
+        Model_autoenc = Model_autoenc_v3_bn
+    else:
+        raise Exception("Unknown autoenc_version. Model_clsf_from_autoenc.py")
+
     input_img = Input(shape=input_shape)
-    model = tensorflow.keras.Model(input_img, fc(Model_autoenc_v1.encoder(input_img), softmax_size) )
+    model = tensorflow.keras.Model(input_img, fc(Model_autoenc.encoder(input_img), softmax_size) )
 
     print (model.summary())
 

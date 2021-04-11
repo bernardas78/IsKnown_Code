@@ -9,11 +9,17 @@ from Globals.globalvars import Glb
 
 def train_single_classifier(**argv ):
     fc_version = argv["fc_version"]
+    autoenc_version = argv["autoenc_version"]
+    autoenc_datetrained = argv["autoenc_datetrained"]
+    #autoenc_filename = argv["autoenc_filename"]
 
     #autoenc_file_path = "A:\\IsKnown_Results\\model_autoenc_20210403.h5"  #Latent 16x16x32
-    autoenc_file_path = os.path.join(Glb.results_folder, "model_autoenc_20210407.h5")  #Latent 8x8x64
-    model_file_name = os.path.join(Glb.results_folder, "model_clsf_from_autoenc_{}_fc{}.h5".format( date.today().strftime("%Y%m%d"), str(fc_version) ) )
-    lc_filename = os.path.join(Glb.results_folder, "lc_clsf_from_autoenc_{}_fc{}.csv".format(date.today().strftime("%Y%m%d"), str(fc_version) ) )
+    #autoenc_file_path = os.path.join(Glb.results_folder, "model_autoenc_20210407.h5")  #Latent 8x8x64
+    autoenc_filename = "model_autoenc_{}_v{}.h5".format (autoenc_datetrained, autoenc_version)
+    autoenc_file_path = os.path.join(Glb.results_folder, autoenc_filename)
+    #autoenc_version = autoenc_file_path.split('_')[-1].split('.')[0]    #expected format: model_autoenc_20210407_v2.h5 ==> v2
+    model_file_name = os.path.join(Glb.results_folder, "model_clsf_from_autoenc_{}_fc{}_autoenc{}.h5".format( date.today().strftime("%Y%m%d"), str(fc_version), autoenc_version ) )
+    lc_filename = os.path.join(Glb.results_folder, "lc_clsf_from_autoenc_{}_fc{}_autoenc{}.csv".format(date.today().strftime("%Y%m%d"), str(fc_version), autoenc_version ) )
 
     data_path = os.path.join(Glb.images_folder, "Bal_v14", "Ind-0")
 
@@ -57,7 +63,8 @@ def train_single_classifier(**argv ):
     prep_model_params = {
         "input_shape": (target_size,target_size,3),
         "softmax_size": Softmax_size,
-        "fc_version": fc_version
+        "fc_version": fc_version,
+        "autoenc_version": autoenc_version
     }
     model_clsf = prepModel_clsf (**prep_model_params)
 
