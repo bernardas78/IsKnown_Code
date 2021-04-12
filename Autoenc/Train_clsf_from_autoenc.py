@@ -1,4 +1,3 @@
-from Autoenc import Model_autoenc_v1 as m_autoenc_v1
 from Autoenc import Model_clsf_from_autoenc as m_clsf
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator

@@ -13,7 +13,7 @@ modelVersions_dic = {
 
 def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
                padding, target_size, dense_sizes,
-               architecture, conv_layers_over_5, use_maxpool_after_conv_layers_after_5th, version, load_existing):
+               architecture, conv_layers_over_5, use_maxpool_after_conv_layers_after_5th, version, load_existing, gpu_id):
 
     # Trains a model
     #   model = optional parameter; creates new if not passed; otherwise keeps training
@@ -53,9 +53,9 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
     dense_sizes["d-1"] = Softmax_size
 
     model_file_name = os.path.join(Glb.results_folder,
-                                   "model_clsf_from_isVisible_{}.h5".format(date.today().strftime("%Y%m%d")))
+                                   "model_clsf_from_isVisible_{}_gpu{}.h5".format(date.today().strftime("%Y%m%d"), gpu_id))
     lc_filename = os.path.join(Glb.results_folder,
-                               "lc_clsf_from_isVisible_{}.csv".format(date.today().strftime("%Y%m%d")))
+                               "lc_clsf_from_isVisible_{}_gpu{}.csv".format(date.today().strftime("%Y%m%d"), gpu_id))
     # Create or load model
     if not load_existing:
         print ("Creating model")
