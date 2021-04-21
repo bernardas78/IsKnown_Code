@@ -1,7 +1,7 @@
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
-from keras.backend import function
-import keras.layers.core
+from tensorflow.keras.backend import function
+#import tensorflow.keras.layers.core
 import tensorflow.python.keras.layers.core
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess_input
 

@@ -70,8 +70,11 @@ class Conf_Mat:
 
         ax.set_xticks( np.arange(len(prod_names))+0.5 )
         ax.set_yticks( np.arange(len(prod_names))+0.5 )
+
+        #prod_names = ["Product "+str(i) for i in range(len(prod_names))]
         ax.set_yticklabels(prod_names , horizontalalignment='right', rotation = 0, size=5)
         ax.set_xticklabels(prod_names , horizontalalignment='right', rotation = 90, size=5)
+
         ax.set_xlabel("PREDICTED", weight="bold")#, size=20)
         ax.set_ylabel("ACTUAL", weight="bold")#, size=20)
         plt.tight_layout()

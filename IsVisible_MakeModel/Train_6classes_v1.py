@@ -1,4 +1,7 @@
-import Model_6classes_c5plus_d3_v1 as m_6classes_c5plus_d3_v1
+#import Model_6classes_c5plus_d3_v1 as m_6classes_c5plus_d3_v1
+import Model_6classes_c5plus_d3_v1_custom_loss as m_6classes_c5plus_d3_v1
+
+
 from tensorflow.keras.callbacks import EarlyStopping, CSVLogger, ModelCheckpoint
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import load_model

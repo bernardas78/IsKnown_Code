@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
 
-metrics_file = r"metrics_aug20_aug102030.csv"
+metrics_file = r"metrics_aug20_aug102030_resnet.csv"
 
 df_metrics = pd.read_csv(metrics_file)
 
