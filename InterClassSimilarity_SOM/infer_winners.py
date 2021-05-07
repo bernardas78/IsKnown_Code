@@ -1,0 +1,30 @@
+#   Input: SOM clusterers
+#   Output: SOM clusters (assignment of each sample to a cluster); in file
+#       For Train, Val, Test
+
+import pickle
+import os
+from InterClassSimilarity_SOM.som_common import loadActivations
+from Globals.globalvars import Glb
+
+dim_size = 14
+
+# SOM clusterer
+som_filename = os.path.join(Glb.results_folder, "som_clusterer_{}x{}".format(dim_size, dim_size) )
+
+# Results file: assigned clusters
+clusters_filename_pattern = "som_clstrs_{}_{}x{}.h5"
+
+# Load SOM clusterer
+mysom = pickle.load ( open(som_filename, 'rb') )
+
+for set_name in ["Train", "Val", "Test"]:
+    # Load activations
+    orange_tab = loadActivations(set_name)
+
+    # Inference: get winner neurons (i.e. cluster asssignment) for each sample
+    pred_winner_neurons = mysom.winners ( orange_tab.X )
+
+    # Save cluster assignment files
+    clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, str(dim_size), str(dim_size) ) )
+    pickle.dump( (pred_winner_neurons, orange_tab.Y), open(clusters_filename, 'wb'))

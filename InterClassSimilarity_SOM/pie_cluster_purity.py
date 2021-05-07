@@ -8,20 +8,22 @@ import numpy as np
 from collections import Counter
 from matplotlib import pyplot as plt
 
+purity_filename_pattern = "temp/purity_{}x{}.jpg"
+
 #set_name = "Test"
 set_name = "Train"
 
-dim_size = 8
+dim_size = 14
 
 results_folder = r"a:\IsKnown_Results"
-clusters_filename = os.path.join ( results_folder,"{}_clstrs_{}x{}_Orange.tab".format ( set_name, str(dim_size), str(dim_size) ) )
+clusters_filename = os.path.join ( results_folder, "{}_clstrs_{}x{}_Orange.tab".format ( set_name, str(dim_size), str(dim_size) ) )
 
 (pred_winner_neurons, lbls) = pickle.load( open(clusters_filename, 'rb') )
 
-figure, axes = plt.subplots(nrows=8, ncols=8)
+figure, axes = plt.subplots(nrows=dim_size, ncols=dim_size)
 colors=('b', 'g', 'r', 'c', 'm', 'y')
-for i in range(8):
-    for j in range(8):
+for i in range(dim_size):
+    for j in range(dim_size):
         # print ("i={}, j={}".format(i,j))
         # filter samples where this is winner neuron
         this_neuron_lbls = lbls[(pred_winner_neurons[:, 0] == i) & (pred_winner_neurons[:, 1] == j)].astype(int)
@@ -33,9 +35,9 @@ for i in range(8):
             labels = [item[0] for item in most_common_classes[:max_cnt]] + ["Other"]
 
             print ("i={}, j={}, Len={}".format(i,j,len(this_neuron_lbls)))
-            radius = np.sqrt( len(this_neuron_lbls) / len(lbls)) * 8
+            radius = np.sqrt( len(this_neuron_lbls) / len(lbls)) * dim_size
             axes[i,j].pie(sizes, labels=labels, colors=colors, radius=radius)#, textprops={'fontsize': 5}) #, autopct='%1.1f%%')
 
 plt.show()
-plt.savefig("purity_8x8.jpg")
+plt.savefig(purity_filename_pattern.format(dim_size,dim_size))
 plt.close()

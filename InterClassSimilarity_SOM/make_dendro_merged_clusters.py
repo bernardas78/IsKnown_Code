@@ -13,7 +13,7 @@ set_name = "Train"
 dim_size = 8
 
 results_folder = r"a:\IsKnown_Results"
-dendro_filename_pattern = "dendro.{}.{}.png"
+dendro_filename_pattern = "temp/dendro.{}.{}.png"
 purity_impr_mat_filename = os.path.join ( results_folder,"{}_purity_impr_mat_{}x{}.h5".format ( set_name, str(dim_size), str(dim_size) ) )
 
 
@@ -40,5 +40,5 @@ fig = plt.figure(figsize=(30, 10))
 dn = dendrogram(Z=clstrs, labels=df_prodnames["product"].tolist(), leaf_font_size=6)
 plt.tight_layout()
 #plt.show()
-plt.savefig(dendro_filename_pattern.format(set_name,linkage_method))
+plt.savefig(dendro_filename_pattern.format(set_name, linkage_method))
 plt.close()
