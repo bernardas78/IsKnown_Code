@@ -16,7 +16,7 @@ glb_aff_variation=20
 src_folder = r"A:\IsKnown_Images\Aff_NE_Hier"
 
 #save_to_dir_template = r"A:\IsKnown_Images\A_Balanced"
-save_to_dir_template = r"A:\IsKnown_Images\Aff_NE_Balanced_AffineAug"
+save_to_dir_template = r"A:\IsKnown_Images\Aff_NE_Balanced_AffineAug\AffAug{}".format(glb_aff_variation)
 #save_to_dir_template = r"C:\IsKnown_Images_IsVisible"   #comment above to balance straight to SSD
 
 def augment_folder (src_classcode_lvl_folder, dest_classcode_lvl_folder, img_cnt):

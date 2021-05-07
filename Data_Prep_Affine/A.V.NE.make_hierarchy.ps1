@@ -12,11 +12,13 @@ $dest_folder_pattern = 'A:\IsKnown_Images\Aff_NE_Hier\'
 
 # for each version of model
 Get-ChildItem $src_folder -Directory |
+#Get-ChildItem $src_folder -Directory -Filter Bal_v14 |
 Foreach{
     $src_modelVersion_folder = $_.FullName
     $model_version = $_.Name
 
     for ($Ind_minus = 0; $Ind_minus -lt 5; $Ind_minus++)
+    #for ($Ind_minus = 1; $Ind_minus -lt 5; $Ind_minus++)
     {
         $dest_folder = $dest_folder_pattern + $model_version + '\Ind-' + $Ind_minus
 
