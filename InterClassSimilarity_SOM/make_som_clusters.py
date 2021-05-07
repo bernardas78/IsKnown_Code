@@ -1,5 +1,5 @@
 # Make SOM clusters:
-#   Input: Activation files
+#   Input: Activation files (made by InterClassSimilarity\adhoc_dist_mat.py
 #   Output: SOM clusterers
 #   Output: SOM clusters (assignment of each sample to a cluster); in file
 

@@ -6,6 +6,8 @@ import pickle
 import os
 from InterClassSimilarity_SOM.som_common import loadActivations
 from Globals.globalvars import Glb
+from InterClassSimilarity_SOM.pie_cluster_purity import purity_pie
+import time
 
 dim_size = 14
 
@@ -23,8 +25,15 @@ for set_name in ["Train", "Val", "Test"]:
     orange_tab = loadActivations(set_name)
 
     # Inference: get winner neurons (i.e. cluster asssignment) for each sample
+    now = time.time()
     pred_winner_neurons = mysom.winners ( orange_tab.X )
+    print("Prdicted winners in {} seconds".format(time.time() - now))
 
     # Save cluster assignment files
     clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, str(dim_size), str(dim_size) ) )
+    now = time.time()
     pickle.dump( (pred_winner_neurons, orange_tab.Y), open(clusters_filename, 'wb'))
+    print("Saved winners in {} seconds".format(time.time() - now))
+
+    # Calculate purity and draw pie charts
+    purity_pie(set_name,dim_size)
