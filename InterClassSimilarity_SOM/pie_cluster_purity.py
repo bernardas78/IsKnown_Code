@@ -6,7 +6,7 @@ from Globals.globalvars import Glb
 import pandas as pd
 
 import matplotlib
-matplotlib.use('Agg')   # otherwise, on 1080 fails importing pyplot
+#matplotlib.use('Agg')   # otherwise, on 1080 fails importing pyplot
 from matplotlib import pyplot as plt
 
 purity_filename_pattern = "temp/purity_{}_{}x{}.jpg"
@@ -44,16 +44,16 @@ def purity_pie(set_name, dim_size):
                 sizes = sizes_first_n + [len(this_neuron_lbls) - np.sum(sizes_first_n)] # Add "Other"
                 prod_indices = [ item[0] for item in most_common_classes[:max_cnt]]
                 labels = [ df_prodnames[ind] for ind in prod_indices] + [""] # Add "Other"
-                labels = [ lbl[:10] for lbl in labels ] # left10
+                labels = [ lbl[:15] for lbl in labels ] # left10
 
                 #print ("i={}, j={}, Len={}".format(i,j,len(this_neuron_lbls)))
                 radius = np.sqrt( len(this_neuron_lbls) / len(lbls)) * dim_size
-                axes[i,j].pie(sizes, labels=labels, colors=colors, radius=radius, textprops={'fontsize': 4})#, textprops={'fontsize': 5}) #, autopct='%1.1f%%')
+                axes[i,j].pie(sizes, labels=labels, colors=colors, radius=radius, textprops={'fontsize': 6})#, textprops={'fontsize': 5}) #, autopct='%1.1f%%')
             else:
                 #axes[i, j].set_xticks([])
                 #axes[i, j].set_yticks([])
                 axes[i, j].axis('off')
 
-    #plt.show()
-    plt.savefig(purity_filename_pattern.format(set_name, dim_size,dim_size))
-    plt.close()
+    plt.show()
+    #plt.savefig(purity_filename_pattern.format(set_name, dim_size,dim_size))
+    #plt.close()

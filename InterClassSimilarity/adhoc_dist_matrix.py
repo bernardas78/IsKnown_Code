@@ -11,7 +11,7 @@ import os
 model = load_model(r"a:\IsKnown_Results\1080\model_clsf_from_isVisible_20210415_gpu1.h5") # 83% test accuracy
 act_filename_pattern = r"a:\IsKnown_Results\activations_prelast_clsf_from_isVisible_20210415_gpu1_{}.h5"
 dist_mat_filename_pattern = r"a:\IsKnown_Results\distmat_prelast_clsf_from_isVisible_20210415_gpu1_{}_{}.h5"
-dendro_filename_pattern = "dendro.{}.{}.{}.png"
+dendro_filename_pattern = "temp/dendro.{}.{}.{}.png"
 
 # which layer is needed?
 #   model.summary()
@@ -23,7 +23,9 @@ prelast_output_shape = prelast_dense_layer.output_shape[1]
 batch_size = 350
 
 #set_name = "Test"
-set_name = "Train"
+#set_name = "Train"
+set_name = "Val"
+
 
 #dist_method = "manhattan"
 #dist_method = "euclidean"
@@ -127,5 +129,5 @@ plt.close()
 import seaborn as sns
 sns.set(font_scale=0.3)
 ax = sns.heatmap(dist_mat, cbar=False, xticklabels=prod_names, yticklabels=prod_names, square=True)
-plt.savefig(r"D:\IsKnown_Code\InterClassSimilarity\dist_mat.png")
+plt.savefig(r"D:\IsKnown_Code\InterClassSimilarity\temp\dist_mat.png")
 plt.close()
