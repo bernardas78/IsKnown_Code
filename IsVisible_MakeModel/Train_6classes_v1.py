@@ -1,5 +1,5 @@
-#import Model_6classes_c5plus_d3_v1 as m_6classes_c5plus_d3_v1
-import Model_6classes_c5plus_d3_v1_custom_loss as m_6classes_c5plus_d3_v1
+import Model_6classes_c5plus_d3_v1 as m_6classes_c5plus_d3_v1
+#import Model_6classes_c5plus_d3_v1_custom_loss as m_6classes_c5plus_d3_v1
 
 
 from tensorflow.keras.callbacks import EarlyStopping, CSVLogger, ModelCheckpoint
@@ -16,7 +16,8 @@ modelVersions_dic = {
 
 def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
                padding, target_size, dense_sizes,
-               architecture, conv_layers_over_5, use_maxpool_after_conv_layers_after_5th, version, load_existing, gpu_id):
+               architecture, conv_layers_over_5, use_maxpool_after_conv_layers_after_5th, version, load_existing,
+               gpu_id, hier_lvl):
 
     # Trains a model
     #   model = optional parameter; creates new if not passed; otherwise keeps training
@@ -43,7 +44,7 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
     #datasrc = "visible"
 
     # Manually copied to C: to speed up training
-    data_dir = os.path.join(Glb.images_folder, "Bal_v14", "Ind-0")
+    data_dir = os.path.join(Glb.images_folder, "Bal_v14", "Ind-{}".format(hier_lvl) )
     data_dir_train = os.path.join(data_dir, "Train")
     data_dir_val = os.path.join(data_dir, "Val")
     data_dir_test = os.path.join(data_dir, "Test")

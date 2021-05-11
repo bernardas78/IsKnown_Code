@@ -2,7 +2,7 @@
 import Train_6classes_v1 as t_6_v1
 import numpy as np
 
-def train_on_single_gpu (gpu_id):
+def train_on_single_gpu (gpu_id, hier_lvl):
 
     start_version = 60
     end_version = 60
@@ -111,7 +111,8 @@ def train_on_single_gpu (gpu_id):
                        "use_maxpool_after_conv_layers_after_5th": use_maxpool_after_conv_layers_after_5th_dic[i] if i in use_maxpool_after_conv_layers_after_5th_dic else [],
                        "version": i,
                        "load_existing": load_existing,
-                       "gpu_id": gpu_id}
+                       "gpu_id": gpu_id,
+                       "hier_lvl": hier_lvl}
         model = t_6_v1.trainModel( **params_dict )
         #model_file_name = r"J:\Visible_models\6class\model_6classes_v" + str(i) + ".h5"
         #model.save(model_file_name)
