@@ -6,7 +6,7 @@ from Globals.globalvars import Glb
 import pandas as pd
 
 import matplotlib
-#matplotlib.use('Agg')   # otherwise, on 1080 fails importing pyplot
+matplotlib.use('Agg')   # otherwise, on 1080 fails importing pyplot
 from matplotlib import pyplot as plt
 
 purity_filename_pattern = "temp/purity_{}_{}x{}.jpg"
@@ -18,6 +18,9 @@ clusters_filename_pattern = "som_clstrs_{}_{}x{}.h5"
 #dim_size = 14
 
 def purity_pie(set_name, dim_size):
+
+    purity = []
+
     df_prodnames = pd.read_csv("df_prods_194.csv", header=0)["product"].tolist()
     clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, str(dim_size), str(dim_size) ) )
 
@@ -32,6 +35,10 @@ def purity_pie(set_name, dim_size):
             this_neuron_lbls = lbls[(pred_winner_neurons[:, 0] == i) & (pred_winner_neurons[:, 1] == j)].astype(int)
             most_common_classes = Counter(this_neuron_lbls).most_common()
             if len(most_common_classes) > 0:
+                # highest class
+                purity.append( most_common_classes[0][1] )
+                print ("DEBUG: Node {},{} purity {}/{}".format(i,j, most_common_classes[0][1], len(this_neuron_lbls) ) )
+
                 # top 80% containing classes
                 cum_probs = np.cumsum([item[1]/len(this_neuron_lbls) for item in most_common_classes])
                 max_cnt = np.where(cum_probs > 0.8)[0][0] + 1
@@ -54,6 +61,10 @@ def purity_pie(set_name, dim_size):
                 #axes[i, j].set_yticks([])
                 axes[i, j].axis('off')
 
-    plt.show()
-    #plt.savefig(purity_filename_pattern.format(set_name, dim_size,dim_size))
-    #plt.close()
+    #plt.show()
+    purity_filename = purity_filename_pattern.format(set_name, dim_size, dim_size)
+    plt.savefig(purity_filename)
+    plt.close()
+    print ("Saved piechart in {}".format(purity_filename))
+
+    print ("Total purity: {}".format (np.sum(purity)/len(lbls) ) )

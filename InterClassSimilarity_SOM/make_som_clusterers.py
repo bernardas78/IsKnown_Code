@@ -1,7 +1,6 @@
 # Make SOM clusters:
 #   Input: Activation files (made by InterClassSimilarity\adhoc_dist_mat.py
 #   Output: SOM clusterers
-#   Output: SOM clusters (assignment of each sample to a cluster); in file
 
 from Orange.projection import som
 import pickle
@@ -11,9 +10,11 @@ from Globals.globalvars import Glb
 from InterClassSimilarity_SOM.som_common import loadActivations
 
 
-#set_name = "Test"
-set_name = "Train"
-dim_size = 14 #8
+set_name = "Test"
+#set_name = "Val"
+#set_name = "Train"
+
+dim_size = 15 #8
 l_rate = 0.5
 n_iters = 50
 

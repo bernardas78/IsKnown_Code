@@ -20,6 +20,6 @@ def loadActivations(set_name):
                 DiscreteVariable.make(name="lbls", values=np.unique(lbls.astype(str) ) ) )
     now = time.time()
     orange_tab = Orange.data.Table.from_numpy( domain=domain, X=act_prelast, Y=lbls.astype(str))
-    print("Made SOM clusters in {} seconds".format(time.time() - now))
+    print("Made Orange table from np_arrays in {} seconds".format(time.time() - now))
 
     return orange_tab
