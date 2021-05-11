@@ -10,6 +10,6 @@ for model_id in range(9):
     isvisible_model_version=14,
     hier_lvl=0,
     #aff_aug_lvl=10,
-    emptyness_prefix="Bal",
+    emptyness_prefix="Overfit",
     val_acc_name='val_accuracy',   # TF 2.4.1: 'val_accuracy'; my: 'val_acc'
     model_id=model_id)

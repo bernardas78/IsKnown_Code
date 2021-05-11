@@ -87,7 +87,7 @@ def train_on_single_gpu (gpu_id, hier_lvl):
     }
 
     for i in np.arange(start_version,end_version+1):
-        params_dict = {"epochs": 100,
+        params_dict = {"epochs": 10,
                        "bn_layers": bn_layers_list[i] if i in bn_layers_list else bn_layers_list["default"],
                        "dropout_layers": dropout_layers_list[i] if i in dropout_layers_list else [],
                        "l2_layers": l2_layers_list[i] if i in l2_layers_list else {},
