@@ -8,21 +8,23 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')   # otherwise, on 1080 fails importing pyplot
 from matplotlib import pyplot as plt
+from Globals.globalvars import Glb
+import os
 
-purity_filename_pattern = "temp/purity_{}_{}x{}.jpg"
-clusters_filename_pattern = "som_clstrs_{}_{}x{}.h5"
+purity_filename_pattern = "purity_{}_{}x{}_hier{}.jpg"
+clusters_filename_pattern = "som_clstrs_{}_{}x{}_hier{}.h5"
 
 #set_name = "Test"
 #set_name = "Train"
 
 #dim_size = 14
 
-def purity_pie(set_name, dim_size):
+def purity_pie(set_name, dim_size,hier_lvl):
 
     purity = []
 
     df_prodnames = pd.read_csv("df_prods_194.csv", header=0)["product"].tolist()
-    clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, str(dim_size), str(dim_size) ) )
+    clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, dim_size, dim_size, hier_lvl ) )
 
     (pred_winner_neurons, lbls) = pickle.load( open(clusters_filename, 'rb') )
 
@@ -37,7 +39,7 @@ def purity_pie(set_name, dim_size):
             if len(most_common_classes) > 0:
                 # highest class
                 purity.append( most_common_classes[0][1] )
-                print ("DEBUG: Node {},{} purity {}/{}".format(i,j, most_common_classes[0][1], len(this_neuron_lbls) ) )
+                #print ("DEBUG: Node {},{} purity {}/{}".format(i,j, most_common_classes[0][1], len(this_neuron_lbls) ) )
 
                 # top 80% containing classes
                 cum_probs = np.cumsum([item[1]/len(this_neuron_lbls) for item in most_common_classes])
@@ -50,8 +52,11 @@ def purity_pie(set_name, dim_size):
                 sizes_first_n = [item[1] for item in most_common_classes[:max_cnt]]
                 sizes = sizes_first_n + [len(this_neuron_lbls) - np.sum(sizes_first_n)] # Add "Other"
                 prod_indices = [ item[0] for item in most_common_classes[:max_cnt]]
-                labels = [ df_prodnames[ind] for ind in prod_indices] + [""] # Add "Other"
-                labels = [ lbl[:15] for lbl in labels ] # left10
+                if hier_lvl==0:
+                    labels = [ df_prodnames[ind] for ind in prod_indices] + [""] # Add "Other"
+                    labels = [ lbl[:15] for lbl in labels ] # left10
+                else:
+                    labels = prod_indices + [""] # Add "Other"
 
                 #print ("i={}, j={}, Len={}".format(i,j,len(this_neuron_lbls)))
                 radius = np.sqrt( len(this_neuron_lbls) / len(lbls)) * dim_size
@@ -62,9 +67,9 @@ def purity_pie(set_name, dim_size):
                 axes[i, j].axis('off')
 
     #plt.show()
-    purity_filename = purity_filename_pattern.format(set_name, dim_size, dim_size)
+    purity_filename = os.path.join (Glb.graphs_folder, purity_filename_pattern.format(set_name, dim_size, dim_size, hier_lvl) )
     plt.savefig(purity_filename)
     plt.close()
     print ("Saved piechart in {}".format(purity_filename))
 
-    print ("Total purity: {}".format (np.sum(purity)/len(lbls) ) )
+    print ("Total purity in {}: {}".format (set_name, np.sum(purity)/len(lbls) ) )
