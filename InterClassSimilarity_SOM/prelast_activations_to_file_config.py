@@ -2,7 +2,7 @@ from InterClassSimilarity_SOM.prelast_activations_to_file import put_prelast_act
 from Globals.globalvars import Glb
 import os
 
-hier_lvl = 1
+hier_lvl = 2
 
 #model = load_model( os.path.join( Glb.results_folder, "model_clsf_from_isVisible_20210415_gpu1.h5") ) # 83% test accuracy
 #act_filename_pattern = os.path.join( Glb.results_folder, "activations_prelast_clsf_from_isVisible_20210415_gpu1_{}.h5")
