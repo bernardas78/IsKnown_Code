@@ -14,10 +14,10 @@ from InterClassSimilarity_SOM.som_common import loadActivations
 #set_name = "Val"
 #set_name = "Train"
 
-def make_som_clusterers( hier_lvl, dim_size):
+def make_som_clusterers( hier_lvl, dim_size, n_iters):
     #dim_size = 15 #8
     l_rate = 0.5
-    n_iters = 50
+    #n_iters = 20
 
 
     # SOM clusterer
