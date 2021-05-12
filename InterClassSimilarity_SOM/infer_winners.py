@@ -1,6 +1,8 @@
 #   Input: SOM clusterers
-#   Output: SOM clusters (assignment of each sample to a cluster); in file
-#       For Train, Val, Test
+#   Output:
+#       SOM clusters (assignment of each sample to a cluster); in file
+#       Pie charts
+#    , for Train, Val, Test
 
 import pickle
 import os
@@ -9,10 +11,10 @@ from Globals.globalvars import Glb
 from InterClassSimilarity_SOM.pie_cluster_purity import purity_pie
 import time
 
-dim_size = 14
+dim_size = 15
 
-set_names = ["Train", "Val", "Test"]
-do_predict = False
+set_names = ["Test"] #["Train", "Val", "Test"]
+do_predict = True
 do_piecharts = True
 
 # SOM clusterer
