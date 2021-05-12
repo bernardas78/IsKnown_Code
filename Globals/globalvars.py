@@ -13,7 +13,7 @@ class Glb:
         batch_size=256
     else:
         images_folder = 'C:/IsKnown_Images_IsVisible'
-        results_folder = 'A:/IsKnown_Results'
+        results_folder = 'C:/IsKnown_Results'
         tensorboard_logs_folder = 'C:/IsKnown_TBLogs'
         cache_folder = 'C:/IsKnown_Cache'
         batch_size = 1024
