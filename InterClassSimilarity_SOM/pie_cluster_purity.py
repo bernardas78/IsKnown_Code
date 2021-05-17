@@ -1,29 +1,55 @@
 import pickle
-import os
 import numpy as np
 from collections import Counter
-from Globals.globalvars import Glb
 import pandas as pd
+from Globals.globalvars import Glb
+import os
 
 import matplotlib
 matplotlib.use('Agg')   # otherwise, on 1080 fails importing pyplot
 from matplotlib import pyplot as plt
-from Globals.globalvars import Glb
-import os
 
 purity_filename_pattern = "purity_{}_{}x{}_hier{}.jpg"
 clusters_filename_pattern = "som_clstrs_{}_{}x{}_hier{}.h5"
 
-#set_name = "Test"
-#set_name = "Train"
+cluster_structure_folder_pattern = "{}_{}x{}_hier{}"
+cluster_structure_filename_pattern = "impurity_{}_[{}_{}].csv"
 
-#dim_size = 14
+df_prodnames = pd.read_csv("df_prods_194.csv", header=0)["product"].tolist()
+
+
+# Saves cluster structure to file
+def cluster_structure_to_csv(set_name, dim_size,hier_lvl,i,j,most_common_classes):
+    clstr_size = np.sum([item[1] for item in most_common_classes])
+
+    # percentages and product names of all products of the cluster
+    pcts = [item[1]/clstr_size for item in most_common_classes]
+    prods = [ df_prodnames[item[0]] for item in most_common_classes]
+    prod_ids = [ item[0] for item in most_common_classes]
+
+    # pct of most common class
+    purity = pcts[0]
+
+    # save to file
+    df_clstr_str = pd.DataFrame(#columns=[,,],
+                                data= {
+                                    "Product": prods,
+                                    "Prod_ID": prod_ids,
+                                    "Pct": pcts
+                                } )
+    cluster_structure_folder = cluster_structure_folder_pattern.format( set_name, dim_size, dim_size, hier_lvl )
+    cluster_structure_filename = cluster_structure_filename_pattern.format("{:.3f}".format(purity), i, j)
+
+    cluster_structure_filepath = os.path.join ( Glb.results_folder, "SOM_Clstr_Str", cluster_structure_folder, cluster_structure_filename)
+    df_clstr_str.to_csv(cluster_structure_filepath, index=False, header=True, mode='w')
+
+
+
 
 def purity_pie(set_name, dim_size,hier_lvl):
 
     purity = []
 
-    df_prodnames = pd.read_csv("df_prods_194.csv", header=0)["product"].tolist()
     clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, dim_size, dim_size, hier_lvl ) )
 
     (pred_winner_neurons, lbls) = pickle.load( open(clusters_filename, 'rb') )
@@ -37,6 +63,9 @@ def purity_pie(set_name, dim_size,hier_lvl):
             this_neuron_lbls = lbls[(pred_winner_neurons[:, 0] == i) & (pred_winner_neurons[:, 1] == j)].astype(int)
             most_common_classes = Counter(this_neuron_lbls).most_common()
             if len(most_common_classes) > 0:
+                # Save cluster structure to csv for further analysis
+                cluster_structure_to_csv(set_name, dim_size, hier_lvl, i, j, most_common_classes)
+
                 # highest class
                 purity.append( most_common_classes[0][1] )
                 #print ("DEBUG: Node {},{} purity {}/{}".format(i,j, most_common_classes[0][1], len(this_neuron_lbls) ) )

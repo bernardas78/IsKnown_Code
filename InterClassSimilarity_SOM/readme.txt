@@ -4,3 +4,4 @@
 3.infer_winners_config.py
     saves data-to-cluster
     makes piecharts
+4.make_clsf_from_clstrs.py

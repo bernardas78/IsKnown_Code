@@ -2,7 +2,7 @@ from InterClassSimilarity_SOM.infer_winners import infer_winners
 
 
 
-dim_size = 14
+dim_size = 15
 hier_lvl = 0
 
 set_names = ["Test", "Train", "Val"]
