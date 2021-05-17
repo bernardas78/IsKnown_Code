@@ -24,11 +24,11 @@ def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts):
     # Results file: assigned clusters
     clusters_filename_pattern = "som_clstrs_{}_{}x{}_hier{}.h5"
 
-    # Load SOM clusterer
-    mysom = pickle.load ( open(som_filename, 'rb') )
-
     for set_name in set_names:
         if do_predict:
+            # Load SOM clusterer
+            mysom = pickle.load(open(som_filename, 'rb'))
+
             # Load activations
             orange_tab = loadActivations(set_name,hier_lvl)
 
