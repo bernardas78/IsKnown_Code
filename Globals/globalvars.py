@@ -1,6 +1,11 @@
 from sys import platform
+import os
+import math
+import numpy as np
+from PIL import Image
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess_input
+
 
 class Glb:
     #images_folder = '/home/bernardas/IsKnown_Images' if platform=='linux' else 'C:/IsKnown_Images_IsVisible'
@@ -36,3 +41,34 @@ class Glb_Iterators:
             class_mode='categorical')
 
         return data_iterator
+
+    #all_classes = None
+    #all_filepaths = None
+
+
+    @staticmethod
+    def get_iterator_incl_filenames (data_folder, batch_size=32, target_size=256):
+        print ("Inside get_iterator_incl_filenames")
+        # get a list of all files
+        Glb_Iterators.all_classes = os.listdir(data_folder)
+        Glb_Iterators.all_classes.sort()
+        Glb_Iterators.all_filepaths = [ os.path.join(classs,filename) for classs in Glb_Iterators.all_classes for filename in os.listdir( os.path.join(data_folder,classs)) ]
+        #df_files = pd.DataFrame({'filepath': filepaths, 'class_code': np.repeat(class_code, len(filepaths))})
+
+        Glb_Iterators.len_iterator = math.ceil( len ( Glb_Iterators.all_filepaths ) / batch_size )
+        for batch_id in range(Glb_Iterators.len_iterator):
+            # Indexes of first/last image
+            first_sample_id = batch_id*batch_size
+            last_sample_id = np.minimum ( first_sample_id+batch_size, len(Glb_Iterators.all_filepaths) )
+
+            #Init structure for entire batch
+            X = np.zeros((last_sample_id-first_sample_id, target_size, target_size, 3), dtype=float)
+            y = np.zeros( (last_sample_id-first_sample_id, len(Glb_Iterators.all_classes)), dtype=int)
+            batch_filepaths = Glb_Iterators.all_filepaths[first_sample_id:last_sample_id]
+
+            for i,filepath in enumerate(Glb_Iterators.all_filepaths[first_sample_id:last_sample_id]):
+                full_filepath = os.path.join(data_folder,filepath)
+                X[i, :, :, :] = np.asarray( Image.open(full_filepath).resize( (target_size,target_size) ) ) / 255.
+                y[i, Glb_Iterators.all_classes.index( os.path.split(filepath)[0] ) ] = 1
+
+            yield X, y, batch_filepaths

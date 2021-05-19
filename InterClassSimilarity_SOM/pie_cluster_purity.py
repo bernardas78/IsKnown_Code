@@ -13,9 +13,31 @@ purity_filename_pattern = "purity_{}_{}x{}_hier{}.jpg"
 clusters_filename_pattern = "som_clstrs_{}_{}x{}_hier{}.h5"
 
 cluster_structure_folder_pattern = "{}_{}x{}_hier{}"
-cluster_structure_filename_pattern = "impurity_{}_[{}_{}].csv"
+cluster_structure_filename_pattern = "purity_{}_[{}_{}].csv"
+
+cluster_dist_folder_pattern = "{}_{}x{}_hier{}"
+cluster_dist_filename_pattern = "dist_[{}_{}].csv"
+
 
 df_prodnames = pd.read_csv("df_prods_194.csv", header=0)["product"].tolist()
+
+# saves filenames and distances from cluster center to csv
+def cluster_filenames_dists_to_csv(set_name, dim_size, hier_lvl, i, j, this_neuron_lbls, this_neuron_filenames):
+
+    prods = [df_prodnames[lbl] for lbl in this_neuron_lbls]
+
+    # save to file
+    df_clstr_items = pd.DataFrame(#columns=[,,],
+                                data= {
+                                    "Product": prods,
+                                    "Prod_ID": this_neuron_lbls,
+                                    "Filename": this_neuron_filenames
+                                } )
+    cluster_dist_folder = cluster_dist_folder_pattern.format( set_name, dim_size, dim_size, hier_lvl )
+    cluster_dist_filename = cluster_dist_filename_pattern.format(i, j)
+
+    cluster_dist_filepath = os.path.join ( Glb.results_folder, "SOM_Clstr_Dist", cluster_dist_folder, cluster_dist_filename)
+    df_clstr_items.to_csv(cluster_dist_filepath, index=False, header=True, mode='w')
 
 
 # Saves cluster structure to file
@@ -46,25 +68,32 @@ def cluster_structure_to_csv(set_name, dim_size,hier_lvl,i,j,most_common_classes
 
 
 
-def purity_pie(set_name, dim_size,hier_lvl):
+def purity_pie(set_name, dim_size,hier_lvl, do_clstr_str, do_clstr_dist):
 
     purity = []
 
     clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, dim_size, dim_size, hier_lvl ) )
 
-    (pred_winner_neurons, lbls) = pickle.load( open(clusters_filename, 'rb') )
+    (pred_winner_neurons, lbls, filenames) = pickle.load( open(clusters_filename, 'rb') )
 
     figure, axes = plt.subplots(nrows=dim_size, ncols=dim_size)
     colors=('b', 'g', 'r', 'c', 'm', 'y')
     for i in range(dim_size):
         for j in range(dim_size):
-            # print ("i={}, j={}".format(i,j))
             # filter samples where this is winner neuron
-            this_neuron_lbls = lbls[(pred_winner_neurons[:, 0] == i) & (pred_winner_neurons[:, 1] == j)].astype(int)
+            inds_this_clstr = np.where( (pred_winner_neurons[:, 0] == i) & (pred_winner_neurons[:, 1] == j) )[0]
+            this_neuron_lbls = lbls[ inds_this_clstr ].astype(int)
+            this_neuron_filenames = [filenames[ind] for ind in inds_this_clstr]
+
             most_common_classes = Counter(this_neuron_lbls).most_common()
             if len(most_common_classes) > 0:
-                # Save cluster structure to csv for further analysis
-                cluster_structure_to_csv(set_name, dim_size, hier_lvl, i, j, most_common_classes)
+                if do_clstr_str:
+                    # Save cluster structure to csv for further analysis
+                    cluster_structure_to_csv(set_name, dim_size, hier_lvl, i, j, most_common_classes)
+
+                if do_clstr_dist:
+                    # Save distances from neuron center to csv for further analysis
+                    cluster_filenames_dists_to_csv(set_name, dim_size, hier_lvl, i, j, this_neuron_lbls, this_neuron_filenames)
 
                 # highest class
                 purity.append( most_common_classes[0][1] )

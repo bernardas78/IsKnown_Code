@@ -24,7 +24,7 @@ def make_som_clusterers( hier_lvl, dim_size, n_iters):
     som_filename = os.path.join(Glb.results_folder, "som_clusterer_{}x{}_hier{}".format(dim_size, dim_size, hier_lvl) )
 
     # Load train activations
-    train_orange_tab = loadActivations("Train", hier_lvl=hier_lvl)
+    train_orange_tab,_ = loadActivations("Train", hier_lvl=hier_lvl)
 
     # Train SOM
     mysom = som.SOM(dim_x=dim_size, dim_y=dim_size, hexagonal=True)

@@ -16,7 +16,7 @@ def loadActivations(set_name, hier_lvl):
     act_filename = os.path.join(Glb.results_folder, act_filename_pattern.format(set_name, hier_lvl) )
     # Load activation tables (~12:17-min train set)
     now = time.time()
-    (act_prelast,lbls) = pickle.load(open(act_filename, 'rb'))
+    (act_prelast,lbls,filenames) = pickle.load(open(act_filename, 'rb'))
     print("Loaded {} activations in {} seconds".format(set_name, time.time() - now))
 
     domain = Domain(
@@ -26,4 +26,4 @@ def loadActivations(set_name, hier_lvl):
     orange_tab = Orange.data.Table.from_numpy( domain=domain, X=act_prelast, Y=lbls.astype(str))
     print("Made Orange table from np_arrays in {} seconds".format(time.time() - now))
 
-    return orange_tab
+    return orange_tab,filenames

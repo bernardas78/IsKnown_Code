@@ -8,5 +8,7 @@ hier_lvl = 0
 set_names = ["Test", "Train", "Val"]
 do_predict = False
 do_piecharts = True
+do_clstr_str = True
+do_clstr_dist = True
 
-infer_winners (set_names=set_names, dim_size=dim_size, hier_lvl=hier_lvl, do_predict=do_predict, do_piecharts=do_piecharts)
+infer_winners (set_names=set_names, dim_size=dim_size, hier_lvl=hier_lvl, do_predict=do_predict, do_piecharts=do_piecharts, do_clstr_str=do_clstr_str, do_clstr_dist=do_clstr_dist)
