@@ -6,7 +6,7 @@ dim_size = 15
 hier_lvl = 0
 
 set_names = ["Test", "Train", "Val"]
-do_predict = False
+do_predict = True
 do_piecharts = True
 do_clstr_str = True
 do_clstr_dist = True

@@ -26,7 +26,7 @@ class Glb:
         batch_size = 1024
 
 class Glb_Iterators:
-    def get_iterator (data_folder, div255_resnet, batch_size=32, target_size=256):
+    def get_iterator (data_folder, div255_resnet, batch_size=32, target_size=256, shuffle=True):
         dataGen = ImageDataGenerator(
             rescale= None if div255_resnet!="div255" else 1./255,
             preprocessing_function= None if div255_resnet!="resnet" else resnet_preprocess_input)
@@ -37,7 +37,7 @@ class Glb_Iterators:
             directory=data_folder,
             target_size=(real_target_size, real_target_size),
             batch_size=batch_size,
-            shuffle=True,
+            shuffle=shuffle,
             class_mode='categorical')
 
         return data_iterator

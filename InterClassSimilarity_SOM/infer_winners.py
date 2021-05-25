@@ -9,6 +9,7 @@ import os
 from InterClassSimilarity_SOM.som_common import loadActivations
 from Globals.globalvars import Glb
 from InterClassSimilarity_SOM.pie_cluster_purity import purity_pie
+from InterClassSimilarity_SOM.dist_from_winners_to_csv import cluster_filenames_dists_to_csv
 import time
 
 #dim_size = 15
@@ -43,6 +44,11 @@ def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_c
             pickle.dump( (pred_winner_neurons, orange_tab.Y, filenames), open(clusters_filename, 'wb'))
             print("Saved winners in {} seconds".format(time.time() - now))
 
+            if do_clstr_dist:
+                cluster_filenames_dists_to_csv(set_name, dim_size, hier_lvl, orange_tab, pred_winner_neurons, filenames, mysom.weights)
+
         if do_piecharts:
             # Calculate purity and draw pie charts
-            purity_pie(set_name,dim_size,hier_lvl, do_clstr_str, do_clstr_dist)
+            purity_pie(set_name,dim_size,hier_lvl, do_clstr_str)
+
+

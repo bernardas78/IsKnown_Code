@@ -116,7 +116,7 @@ from matplotlib import pyplot as plt
 from scipy.cluster.hierarchy import linkage, dendrogram
 from scipy.spatial.distance import squareform
 
-dis_mat_vectorized = squareform (dist_mat, checks=False)
+dis_mat_vectorized = squareform (dist_mat, checks=False, force='tovector')
 clstrs = linkage(y=dis_mat_vectorized, method=linkage_method) # method='centroid' ==> new cluster is in the middle of sub-clusters
 
 fig = plt.figure(figsize=(30, 10))

@@ -1,6 +1,5 @@
 from InterClassSimilarity_SOM.prelast_activations_to_file import put_prelast_act_to_file
 from Globals.globalvars import Glb
-from tensorflow.keras.models import load_model
 import os
 
 hier_lvl = 0
