@@ -8,7 +8,7 @@ from sklearn.metrics.pairwise import cosine_distances, euclidean_distances, manh
 import pickle
 import os
 
-model = load_model(r"a:\IsKnown_Results\1080\model_clsf_from_isVisible_20210415_gpu1.h5") # 83% test accuracy
+model = load_model(r"a:\IsKnown_Results\model_clsf_from_isVisible_20210415_gpu1.h5") # 83% test accuracy
 act_filename_pattern = r"a:\IsKnown_Results\activations_prelast_clsf_from_isVisible_20210415_gpu1_{}.h5"
 dist_mat_filename_pattern = r"a:\IsKnown_Results\distmat_prelast_clsf_from_isVisible_20210415_gpu1_{}_{}.h5"
 dendro_filename_pattern = "temp/dendro.{}.{}.{}.png"
