@@ -1,3 +1,6 @@
+# Makes using Embeddings (pre-last activations):
+#   1.inter-class distance matrix
+#   2.dendrogram based on inter-class distances
 from tensorflow.keras.models import load_model
 from Globals.globalvars import Glb, Glb_Iterators
 from tensorflow.keras.backend import function

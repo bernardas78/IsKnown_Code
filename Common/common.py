@@ -22,7 +22,7 @@ def get_data_iterator (data_folder,
     return data_iterator
 
 def get_pred_actual_classes (model, data_iterator):
-    predictions = model.predict_generator(data_iterator, steps=len(data_iterator))
+    predictions = model.predict(data_iterator, steps=len(data_iterator))
     pred_classes = np.argmax(predictions, axis=1)
     return (pred_classes, data_iterator.classes)
 
