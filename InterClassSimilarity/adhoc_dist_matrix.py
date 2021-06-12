@@ -11,9 +11,9 @@ from sklearn.metrics.pairwise import cosine_distances, euclidean_distances, manh
 import pickle
 import os
 
-model = load_model(r"a:\IsKnown_Results\model_clsf_from_isVisible_20210415_gpu1.h5") # 83% test accuracy
-act_filename_pattern = r"a:\IsKnown_Results\activations_prelast_clsf_from_isVisible_20210415_gpu1_{}.h5"
-dist_mat_filename_pattern = r"a:\IsKnown_Results\distmat_prelast_clsf_from_isVisible_20210415_gpu1_{}_{}.h5"
+model = load_model( os.path.join(Glb.results_folder,"model_clsf_from_isVisible_20210415_gpu1.h5") ) # 83% test accuracy
+act_filename_pattern = os.path.join(Glb.results_folder,"activations_prelast_clsf_from_isVisible_20210415_gpu1_{}.h5")
+dist_mat_filename_pattern = os.path.join(Glb.results_folder, "distmat_prelast_clsf_from_isVisible_20210415_gpu1_{}_{}.h5")
 dendro_filename_pattern = "temp/dendro.{}.{}.{}.png"
 
 # which layer is needed?
@@ -45,29 +45,29 @@ cnt_imgs = len(data_iterator.classes)
 cnt_classes = len(data_iterator.class_indices)
 
 act_filename = act_filename_pattern.format(set_name)
-if not os.path.exists (act_filename):
-    # Allocate buffer for storing activations and labels
-    act_prelast = np.zeros ((cnt_imgs, prelast_output_shape), dtype=np.float32)
-    lbls = np.zeros ((cnt_imgs), dtype=np.int)
-
-    cntr = 0
-    now = datetime.now()
-
-    # Save activations
-    for X,y in data_iterator:
-        cnt_samples_in_batch = y.shape[0]
-        print ("Batch {}/{}".format(cntr, len(data_iterator)))
-        act_prelast[ (cntr*batch_size):(cntr*batch_size+cnt_samples_in_batch),:] = prelast_func_activation([X])[0]
-        lbls [ (cntr*batch_size):(cntr*batch_size+cnt_samples_in_batch) ] = np.argmax(y, axis=1)
-        cntr += 1
-        if cntr >= len(data_iterator):
-            break
-    print ("Total seconds: {}".format((datetime.now() - now).seconds))
-    pickle.dump( (act_prelast,lbls), open(act_filename, 'wb') )
-else:
-    print ("Loading {}".format(act_filename) )
-    (act_prelast,lbls) = pickle.load(open(act_filename, 'rb'))
-    print ("Loaded act_prelast,lbls" )
+#if not os.path.exists (act_filename):
+#    # Allocate buffer for storing activations and labels
+#    act_prelast = np.zeros ((cnt_imgs, prelast_output_shape), dtype=np.float32)
+#    lbls = np.zeros ((cnt_imgs), dtype=np.int)
+#
+#    cntr = 0
+#    now = datetime.now()
+#
+#    # Save activations
+#    for X,y in data_iterator:
+#        cnt_samples_in_batch = y.shape[0]
+#        print ("Batch {}/{}".format(cntr, len(data_iterator)))
+#        act_prelast[ (cntr*batch_size):(cntr*batch_size+cnt_samples_in_batch),:] = prelast_func_activation([X])[0]
+#        lbls [ (cntr*batch_size):(cntr*batch_size+cnt_samples_in_batch) ] = np.argmax(y, axis=1)
+#        cntr += 1
+#        if cntr >= len(data_iterator):
+#            break
+#    print ("Total seconds: {}".format((datetime.now() - now).seconds))
+#    pickle.dump( (act_prelast,lbls), open(act_filename, 'wb') )
+#else:
+print ("Loading {}".format(act_filename) )
+(act_prelast,lbls,filenames) = pickle.load(open(act_filename, 'rb'))
+print ("Loaded act_prelast,lbls" )
 
 
 # Distance matrix (upper right only for dendrogram; for possible need, calc diagonal too - intra class distance)
