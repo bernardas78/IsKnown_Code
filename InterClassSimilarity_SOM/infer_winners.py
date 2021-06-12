@@ -6,7 +6,7 @@
 
 import pickle
 import os
-from InterClassSimilarity_SOM.som_common import loadActivations
+from InterClassSimilarity_SOM.som_common import loadActivations, makeOrangeTable
 from Globals.globalvars import Glb
 from InterClassSimilarity_SOM.pie_cluster_purity import purity_pie
 from InterClassSimilarity_SOM.dist_from_winners_to_csv import cluster_filenames_dists_to_csv
@@ -18,7 +18,7 @@ import time
 #do_predict = True
 #do_piecharts = True
 
-def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_clstr_str, do_clstr_dist):
+def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_clstr_str, do_clstr_dist, incl_filenames):
     # SOM clusterer
     som_filename = os.path.join(Glb.results_folder, "som_clusterer_{}x{}_hier{}".format(dim_size, dim_size, hier_lvl) )
 
@@ -31,7 +31,11 @@ def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_c
             mysom = pickle.load(open(som_filename, 'rb'))
 
             # Load activations
-            orange_tab,filenames = loadActivations(set_name,hier_lvl)
+            #orange_tab,filenames = loadActivations(set_name,hier_lvl)
+            #act_prelast, lbls, filenames = loadActivations(set_name,hier_lvl)
+            tuple_contents = loadActivations(set_name, hier_lvl,incl_filenames)
+            act_prelast, lbls = tuple_contents[0], tuple_contents[1]
+            orange_tab = makeOrangeTable(act_prelast,lbls)
 
             # Inference: get winner neurons (i.e. cluster asssignment) for each sample
             now = time.time()
@@ -41,11 +45,12 @@ def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_c
             # Save cluster assignment files
             clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, dim_size, dim_size, hier_lvl ) )
             now = time.time()
-            pickle.dump( (pred_winner_neurons, orange_tab.Y, filenames), open(clusters_filename, 'wb'))
+            #pickle.dump( (pred_winner_neurons, orange_tab.Y, filenames), open(clusters_filename, 'wb'))
+            pickle.dump( (pred_winner_neurons, orange_tab.Y), open(clusters_filename, 'wb'))
             print("Saved winners in {} seconds".format(time.time() - now))
 
-            if do_clstr_dist:
-                cluster_filenames_dists_to_csv(set_name, dim_size, hier_lvl, orange_tab, pred_winner_neurons, filenames, mysom.weights)
+            if do_clstr_dist and incl_filenames:
+                cluster_filenames_dists_to_csv(set_name, dim_size, hier_lvl, orange_tab, pred_winner_neurons, filenames=tuple_contents[2], mysom_weights=mysom.weights)
 
         if do_piecharts:
             # Calculate purity and draw pie charts

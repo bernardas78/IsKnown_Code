@@ -3,6 +3,7 @@ import os
 import math
 import numpy as np
 from PIL import Image
+import random
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess_input
 
@@ -53,6 +54,7 @@ class Glb_Iterators:
         Glb_Iterators.all_classes = os.listdir(data_folder)
         Glb_Iterators.all_classes.sort()
         Glb_Iterators.all_filepaths = [ os.path.join(classs,filename) for classs in Glb_Iterators.all_classes for filename in os.listdir( os.path.join(data_folder,classs)) ]
+        random.shuffle(Glb_Iterators.all_filepaths)
         #df_files = pd.DataFrame({'filepath': filepaths, 'class_code': np.repeat(class_code, len(filepaths))})
 
         Glb_Iterators.len_iterator = math.ceil( len ( Glb_Iterators.all_filepaths ) / batch_size )

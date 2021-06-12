@@ -52,7 +52,8 @@ def purity_pie(set_name, dim_size,hier_lvl, do_clstr_str):
 
     clusters_filename = os.path.join ( Glb.results_folder, clusters_filename_pattern.format ( set_name, dim_size, dim_size, hier_lvl ) )
 
-    (pred_winner_neurons, lbls, filenames) = pickle.load( open(clusters_filename, 'rb') )
+    #(pred_winner_neurons, lbls, filenames) = pickle.load( open(clusters_filename, 'rb') )
+    (pred_winner_neurons, lbls) = pickle.load( open(clusters_filename, 'rb') )
 
     figure, axes = plt.subplots(nrows=dim_size, ncols=dim_size)
     colors=('b', 'g', 'r', 'c', 'm', 'y')

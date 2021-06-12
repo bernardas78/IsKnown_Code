@@ -14,9 +14,9 @@ import os
 #act_filename_pattern = os.path.join( Glb.results_folder, "activations_prelast_clsf_from_isVisible_20210511_gpu0_{}.h5")
 
 
-def put_prelast_act_to_file(model_filename, act_filename_pattern, hier_lvl, set_name):
+def put_prelast_act_to_file(model_filename, act_filename_pattern, hier_lvl, set_name, incl_filenames):
     model = load_model(model_filename)
-    act_filename = act_filename_pattern.format(set_name, hier_lvl)
+    act_filename = act_filename_pattern.format(set_name, hier_lvl, "filenames" if incl_filenames else "nofilenames")
 
     # Data iterator
     batch_size = 128
@@ -41,18 +41,10 @@ def put_prelast_act_to_file(model_filename, act_filename_pattern, hier_lvl, set_
     #data_iterator = Glb_Iterators.get_iterator(os.path.join( Glb.images_folder, "Bal_v14", "Ind-{}".format(hier_lvl), set_name), "div255", batch_size=batch_size)
     data_folder = os.path.join(Glb.images_folder, "Bal_v14", "Ind-{}".format(hier_lvl), set_name)
     print ("Datafolder:{}".format(data_folder))
-    data_iterator = Glb_Iterators.get_iterator_incl_filenames( data_folder=data_folder, batch_size=batch_size, target_size=256)
-
-    # Total number of images
-    #cnt_imgs = len(data_iterator.classes)
-    #cnt_classes = len(data_iterator.class_indices)
-    #cnt_imgs = len(Glb_Iterators.all_filepaths)
-
-    #act_filename = act_filename_pattern.format(set_name)
-
-    # Allocate buffer for storing activations and labels
-    #act_prelast = np.zeros ((cnt_imgs, prelast_output_shape), dtype=np.float32)
-    #lbls = np.zeros ((cnt_imgs), dtype=np.int)
+    if incl_filenames:
+        data_iterator = Glb_Iterators.get_iterator_incl_filenames( data_folder=data_folder, batch_size=batch_size, target_size=256)
+    else:
+        data_iterator = Glb_Iterators.get_iterator (data_folder=data_folder, div255_resnet="div255", batch_size=batch_size, target_size=256, shuffle=True)
 
     #cntr = 0
     now = datetime.now()
@@ -60,21 +52,35 @@ def put_prelast_act_to_file(model_filename, act_filename_pattern, hier_lvl, set_
 
     # Save activations
     #for X,y in data_iterator:
-    for cntr, (X, y, filenames) in enumerate( data_iterator ):
+    for cntr, batch_tuple in enumerate( data_iterator ):
+
+        if incl_filenames:
+            (X, y, filenames) = batch_tuple
+        else:
+            (X, y) = batch_tuple
+
         if cntr==0:
-            cnt_imgs = len(Glb_Iterators.all_filepaths)
+            if incl_filenames:
+                cnt_imgs = len(Glb_Iterators.all_filepaths)
+            else:
+                cnt_imgs = len(data_iterator.classes)
             # Allocate buffer for storing activations and labels
             act_prelast = np.zeros((cnt_imgs, prelast_output_shape), dtype=np.float32)
             lbls = np.zeros((cnt_imgs), dtype=np.int)
 
         cnt_samples_in_batch = y.shape[0]
         #print ("Batch {}/{}".format(cntr, len(data_iterator)))
-        print("Batch {}/{}".format(cntr, Glb_Iterators.len_iterator))
+        print("Batch {}/{}".format(cntr, Glb_Iterators.len_iterator if incl_filenames else len(data_iterator)))
         act_prelast[ (cntr*batch_size):(cntr*batch_size+cnt_samples_in_batch),:] = prelast_func_activation([X])[0]
         lbls [ (cntr*batch_size):(cntr*batch_size+cnt_samples_in_batch) ] = np.argmax(y, axis=1)
-        all_filenames += filenames
-        #cntr += 1
-        #if cntr >= len(data_iterator):
-        #    break
+        if incl_filenames:
+            all_filenames += filenames
+        if not incl_filenames and (cntr+1) >= len(data_iterator):
+            break
+
     print ("Total seconds: {}".format((datetime.now() - now).seconds))
-    pickle.dump( (act_prelast,lbls,all_filenames), open(act_filename, 'wb') )
+
+    if incl_filenames:
+        pickle.dump( (act_prelast,lbls,all_filenames), open(act_filename, 'wb') )
+    else:
+        pickle.dump( (act_prelast,lbls), open(act_filename, 'wb') )
