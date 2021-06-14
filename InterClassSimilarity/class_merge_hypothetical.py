@@ -10,11 +10,6 @@ from scipy.cluster.hierarchy import linkage
 from tensorflow.keras.models import load_model
 from InterClassSimilarity_SOM import cluster_merge_functions as somf
 
-set_name = "Test"
-#set_name = "Train"
-#set_name = "Val"
-
-
 #dist_method = "manhattan"
 #dist_method = "euclidean"
 dist_method = "cosine"
@@ -89,60 +84,65 @@ from sklearn.metrics import confusion_matrix
 import numpy as np
 import time
 
-############### Prep confusion matrix ########################
-# Prepare data generator
-data_folder = os.path.join( Glb.images_folder, "Bal_v14", "Ind-0", set_name )
-data_iterator = Glb_Iterators.get_iterator (data_folder, div255_resnet="div255", shuffle=False)
+def get_conf_mat(set_name):
+    # Prepare data generator
+    data_folder = os.path.join( Glb.images_folder, "Bal_v14", "Ind-0", set_name )
+    data_iterator = Glb_Iterators.get_iterator (data_folder, div255_resnet="div255", shuffle=False)
 
-# Load moddel
-model_filename = "model_clsf_from_isVisible_20210415_gpu1.h5"
-print ("Loading model {}".format(model_filename))
-now=time.time()
-model = load_model( os.path.join( Glb.results_folder, model_filename ) ) # 83% test accuracy
-print ("Loaded in {} sec".format(time.time()-now))
+    # Load moddel
+    model_filename = "model_clsf_from_isVisible_20210415_gpu1.h5"
+    print ("Loading model {}".format(model_filename))
+    now=time.time()
+    model = load_model( os.path.join( Glb.results_folder, model_filename ) ) # 83% test accuracy
+    print ("Loaded in {} sec".format(time.time()-now))
 
-# Predict highest classes and get conf_mat
-print ("Predicting...")
-now=time.time()
-(y_pred, y_true) = cm.get_pred_actual_classes(model, data_iterator)
-print ("Predicted in {} sec".format(time.time()-now))
-conf_mat = confusion_matrix(y_true=y_true, y_pred=y_pred)
-# sanity check: should be 83%
-acc = np.sum( [ conf_mat[i,i] for i in range(194) ]) / np.sum(conf_mat )
-print ("Acc: {}".format( acc ) )
+    # Predict highest classes and get conf_mat
+    print ("Predicting...")
+    now=time.time()
+    (y_pred, y_true) = cm.get_pred_actual_classes(model, data_iterator)
+    print ("Predicted in {} sec".format(time.time()-now))
+    conf_mat = confusion_matrix(y_true=y_true, y_pred=y_pred)
+    # sanity check: should be 83%
+    acc = np.sum( [ conf_mat[i,i] for i in range(194) ]) / np.sum(conf_mat )
+    print ("Acc: {}".format( acc ) )
+    del model
+    return conf_mat
+
+############### Prep confusion matrix (used to Test) ########################
+test_conf_mat = get_conf_mat("Test")
 
 ####################### EMBEDDINGS DISTANCE ########################
 
 dist_mat_emb_dist_filename_pattern = r"a:\IsKnown_Results\distmat_prelast_clsf_from_isVisible_20210415_gpu1_{}_{}.h5"
-dist_mat_emb_dist_filename = dist_mat_emb_dist_filename_pattern.format(set_name,dist_method)
+dist_mat_emb_dist_filename = dist_mat_emb_dist_filename_pattern.format("Val",dist_method)
 dist_mat_emb_dist = pickle.load(open(dist_mat_emb_dist_filename, 'rb'))
 
-hypot_acc_emb_dist = acc_based_on_class_merge(dist_mat=dist_mat_emb_dist, conf_mat=conf_mat, file_suffix="emb_dist")
+hypot_acc_emb_dist = acc_based_on_class_merge(dist_mat=dist_mat_emb_dist, conf_mat=test_conf_mat, file_suffix="emb_dist")
 
 
 ####################### CONF MAT BIGGEST CONTRIBUTORS ########################
-dist_mat_conf_mat_big_err = 1/(conf_mat+conf_mat.T+1e-7)
-hypot_acc_conf_mat = acc_based_on_class_merge(dist_mat=dist_mat_conf_mat_big_err, conf_mat=conf_mat, file_suffix="conf_mat")
+val_conf_mat = get_conf_mat("Val")
+dist_mat_conf_mat_big_err = 1/(val_conf_mat+val_conf_mat.T+1e-7)
+hypot_acc_conf_mat = acc_based_on_class_merge(dist_mat=dist_mat_conf_mat_big_err, conf_mat=test_conf_mat, file_suffix="conf_mat")
 
 
 ####################### SOM PURITY ##############################################
-set_name = "Test"
-#set_name = "Train"
-dim_size = 16
-clusters_filename = os.path.join ( Glb.results_folder,"{}_clstrs_{}x{}_Orange.tab".format ( set_name, str(dim_size), str(dim_size) ) )
-distmat_filename = os.path.join ( Glb.results_folder,"{}_distmat_{}x{}.h5".format ( set_name, str(dim_size), str(dim_size) ) )
+dim_size = 15
+#clusters_filename = os.path.join ( Glb.results_folder,"{}_clstrs_{}x{}_Orange.tab".format ( set_name, str(dim_size), str(dim_size) ) )
+#distmat_filename = os.path.join ( Glb.results_folder,"{}_distmat_{}x{}.h5".format ( set_name, str(dim_size), str(dim_size) ) )
+clusters_filename = os.path.join ( Glb.results_folder,"som_clstrs_{}_{}x{}_hier0.h5".format ( "Val", str(dim_size), str(dim_size) ) )
 (pred_winner_neurons, lbls) = pickle.load( open(clusters_filename, 'rb') )
 purity_impr_mat = somf.hypotheticalMergePurity(pred_winner_neurons, lbls)
 dist_mat_purity_impr = 1/(purity_impr_mat+1e-7)
-hypot_acc_purity_impr = acc_based_on_class_merge(dist_mat=dist_mat_purity_impr, conf_mat=conf_mat, file_suffix="som_purity_impr")
+hypot_acc_purity_impr = acc_based_on_class_merge(dist_mat=dist_mat_purity_impr, conf_mat=test_conf_mat, file_suffix="som_purity_impr")
 
 ####################### BARCODE STRUCTURE ########################################
 bc_structure_cnt_classes = [194,109,26,5,2]
-bc_structure_acc = [acc,0.837,0.829,0.975,0.971]
+bc_structure_acc = [0.83,0.837,0.829,0.975,0.971]
 
 ####################### GRAPHICS ######################################
 from matplotlib import pyplot as plt
-x = np.arange(conf_mat.shape[0],0,-1)
+x = np.arange(test_conf_mat.shape[0],0,-1)
 plt.plot( x, hypot_acc_emb_dist, label="Embeddings distance" )
 plt.plot( x, hypot_acc_conf_mat, label="Error contribution" )
 plt.plot( x, hypot_acc_purity_impr, label="SOM purity" )
