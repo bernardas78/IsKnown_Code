@@ -19,6 +19,14 @@ dist_method = "cosine"
 linkage_method='single'     # nearest
 #linkage_method='complete'  # farthest
 
+def f1_from_conf_mat(conf_mat):
+    eps=1e-7
+    prec = np.diag(conf_mat) / np.sum(conf_mat + eps, axis=0)
+    rec = np.diag(conf_mat) / np.sum(conf_mat + eps, axis=1)
+    f1 = 2*prec*rec/(prec+rec+eps)
+    return np.mean(f1)
+
+
 # Hypoth acc calc based on dist mat
 def acc_based_on_class_merge(dist_mat, conf_mat, file_suffix):
     cnt_products = dist_mat.shape[0]
@@ -40,6 +48,7 @@ def acc_based_on_class_merge(dist_mat, conf_mat, file_suffix):
     #       hypothetical accuracy
     #       cluster structure > csv
     hypot_acc = [acc]
+    hypot_f1 = [f1_from_conf_mat(conf_mat)]
     classes_to_clstr = {classs: classs for classs in range(cnt_products)}  # Initially classes are their own clusters
     now = time.time()
     for clstr_lvl in range(len(clstrs)):  # each merge: new grouping of classes len(clstrs)
@@ -71,9 +80,10 @@ def acc_based_on_class_merge(dist_mat, conf_mat, file_suffix):
                 conf_mat_hypot[i, j] = np.sum(conf_mat[clstr_i_classes, :][:, clstr_j_classes])
 
         hypot_acc.append(np.sum([conf_mat_hypot[i, i] for i in range(len(this_merge_lbls))]) / np.sum(conf_mat_hypot))
+        hypot_f1.append(f1_from_conf_mat(conf_mat_hypot))
         print("Hypothetical accuracy of {} classes: {}".format(len(this_merge_lbls), hypot_acc[-1]))
     print("Merged in {} sec".format(time.time() - now))
-    return hypot_acc
+    return hypot_acc,hypot_f1
 
 
 
@@ -116,14 +126,13 @@ test_conf_mat = get_conf_mat("Test")
 dist_mat_emb_dist_filename_pattern = r"a:\IsKnown_Results\distmat_prelast_clsf_from_isVisible_20210415_gpu1_{}_{}.h5"
 dist_mat_emb_dist_filename = dist_mat_emb_dist_filename_pattern.format("Val",dist_method)
 dist_mat_emb_dist = pickle.load(open(dist_mat_emb_dist_filename, 'rb'))
-
-hypot_acc_emb_dist = acc_based_on_class_merge(dist_mat=dist_mat_emb_dist, conf_mat=test_conf_mat, file_suffix="emb_dist")
+hypot_acc_emb_dist,hypot_f1_emb_dist = acc_based_on_class_merge(dist_mat=dist_mat_emb_dist, conf_mat=test_conf_mat, file_suffix="emb_dist")
 
 
 ####################### CONF MAT BIGGEST CONTRIBUTORS ########################
 val_conf_mat = get_conf_mat("Val")
 dist_mat_conf_mat_big_err = 1/(val_conf_mat+val_conf_mat.T+1e-7)
-hypot_acc_conf_mat = acc_based_on_class_merge(dist_mat=dist_mat_conf_mat_big_err, conf_mat=test_conf_mat, file_suffix="conf_mat")
+hypot_acc_conf_mat,hypot_f1_conf_mat = acc_based_on_class_merge(dist_mat=dist_mat_conf_mat_big_err, conf_mat=test_conf_mat, file_suffix="conf_mat")
 
 
 ####################### SOM PURITY ##############################################
@@ -134,7 +143,7 @@ clusters_filename = os.path.join ( Glb.results_folder,"som_clstrs_{}_{}x{}_hier0
 (pred_winner_neurons, lbls) = pickle.load( open(clusters_filename, 'rb') )
 purity_impr_mat = somf.hypotheticalMergePurity(pred_winner_neurons, lbls)
 dist_mat_purity_impr = 1/(purity_impr_mat+1e-7)
-hypot_acc_purity_impr = acc_based_on_class_merge(dist_mat=dist_mat_purity_impr, conf_mat=test_conf_mat, file_suffix="som_purity_impr")
+hypot_acc_purity_impr,hypot_f1_purity_impr = acc_based_on_class_merge(dist_mat=dist_mat_purity_impr, conf_mat=test_conf_mat, file_suffix="som_purity_impr")
 
 ####################### BARCODE STRUCTURE ########################################
 bc_structure_cnt_classes = [194,109,26,5,2]
