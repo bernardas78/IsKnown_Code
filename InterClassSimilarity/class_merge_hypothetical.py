@@ -148,8 +148,11 @@ hypot_acc_purity_impr,hypot_f1_purity_impr = acc_based_on_class_merge(dist_mat=d
 ####################### BARCODE STRUCTURE ########################################
 bc_structure_cnt_classes = [194,109,26,5,2]
 bc_structure_acc = [0.83,0.837,0.829,0.975,0.971]
+bc_structure_f1 = [0.8,0.8,0.8,0.8,0.8]
 
 ####################### GRAPHICS ######################################
+
+#          accuracy
 from matplotlib import pyplot as plt
 x = np.arange(test_conf_mat.shape[0],0,-1)
 plt.plot( x, hypot_acc_emb_dist, label="Embeddings distance" )
@@ -160,4 +163,16 @@ plt.xlabel ("Number of classes")
 plt.ylabel ("Accuracy")
 plt.legend(loc="upper right")
 plt.title("Hypothetical accuracy by merging classes")
+plt.show()
+
+#       f-score
+x = np.arange(test_conf_mat.shape[0],0,-1)
+plt.plot( x, hypot_f1_emb_dist, label="Embeddings distance" )
+plt.plot( x, hypot_f1_conf_mat, label="Error contribution" )
+plt.plot( x, hypot_f1_purity_impr, label="SOM purity" )
+plt.plot( bc_structure_cnt_classes, bc_structure_f1, label="Barcode hierarchy" )
+plt.xlabel ("Number of classes")
+plt.ylabel ("F-score")
+plt.legend(loc="upper right")
+plt.title("Hypothetical F-score by merging classes")
 plt.show()
