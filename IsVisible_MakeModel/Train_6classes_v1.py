@@ -57,9 +57,9 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
     dense_sizes["d-1"] = Softmax_size
 
     model_file_name = os.path.join(Glb.results_folder,
-                                   "model_clsf_from_isVisible_{}_gpu{}.h5".format(date.today().strftime("%Y%m%d"), gpu_id))
+                                   "model_clsf_from_isVisible_{}_gpu{}_hier{}.h5".format(date.today().strftime("%Y%m%d"), gpu_id, hier_lvl))
     lc_filename = os.path.join(Glb.results_folder,
-                               "lc_clsf_from_isVisible_{}_gpu{}.csv".format(date.today().strftime("%Y%m%d"), gpu_id))
+                               "lc_clsf_from_isVisible_{}_gpu{}_hier{}.csv".format(date.today().strftime("%Y%m%d"), gpu_id, hier_lvl))
     # Create or load model
     if not load_existing:
         print ("Creating model")
