@@ -12,7 +12,7 @@ import pickle
 import os
 
 model = load_model( os.path.join(Glb.results_folder,"model_clsf_from_isVisible_20210415_gpu1.h5") ) # 83% test accuracy
-act_filename_pattern = os.path.join(Glb.results_folder,"activations_prelast_clsf_from_isVisible_20210415_gpu1_{}.h5")
+act_filename_pattern = os.path.join(Glb.results_folder,"activations_prelast_clsf_from_isVisible_20210415_gpu1_{}_hier0.filenames.h5")
 dist_mat_filename_pattern = os.path.join(Glb.results_folder, "distmat_prelast_clsf_from_isVisible_20210415_gpu1_{}_{}.h5")
 dendro_filename_pattern = "temp/dendro.{}.{}.{}.png"
 

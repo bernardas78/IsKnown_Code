@@ -37,7 +37,7 @@ def hypotheticalMergePurity(pred_winner_neurons, lbls):
             if hypot_purity>best_purity:
                 #print ("better purity found: {}".format(hypot_purity))
                 best_i, best_j, best_purity = class_i,class_j,hypot_purity
-            if cntr%10==0:
+            if cntr%100==0:
                 print ("cntr={}".format(cntr))
                 print("Time elapsed: {} sec".format(time.time() - now))
             cntr +=1
