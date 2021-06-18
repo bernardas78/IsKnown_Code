@@ -4,6 +4,7 @@ import math
 import numpy as np
 from PIL import Image
 import random
+import fnmatch
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess_input
 
@@ -74,3 +75,11 @@ class Glb_Iterators:
                 y[i, Glb_Iterators.all_classes.index( os.path.split(filepath)[0] ) ] = 1
 
             yield X, y, batch_filepaths
+
+
+def find_files(directory, pattern):
+    for root, dirs, files in os.walk(directory):
+        for basename in files:
+            if fnmatch.fnmatch(basename, pattern):
+                fullfilename = os.path.join(root,basename)
+                yield fullfilename
