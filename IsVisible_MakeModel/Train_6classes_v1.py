@@ -17,7 +17,7 @@ modelVersions_dic = {
 def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
                padding, target_size, dense_sizes,
                architecture, conv_layers_over_5, use_maxpool_after_conv_layers_after_5th, version, load_existing,
-               gpu_id, hier_lvl):
+               gpu_id, model_filename, lc_filename, data_dir):
 
     # Trains a model
     #   model = optional parameter; creates new if not passed; otherwise keeps training
@@ -44,7 +44,7 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
     #datasrc = "visible"
 
     # Manually copied to C: to speed up training
-    data_dir = os.path.join(Glb.images_folder, "Bal_v14", "Ind-{}".format(hier_lvl) )
+    #data_dir = os.path.join(Glb.images_folder, "Bal_v14", "Ind-{}".format(hier_lvl) )
     data_dir_train = os.path.join(data_dir, "Train")
     data_dir_val = os.path.join(data_dir, "Val")
     data_dir_test = os.path.join(data_dir, "Test")
@@ -56,10 +56,10 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
     Softmax_size = len (train_iterator.class_indices)
     dense_sizes["d-1"] = Softmax_size
 
-    model_file_name = os.path.join(Glb.results_folder,
-                                   "model_clsf_from_isVisible_{}_gpu{}_hier{}.h5".format(date.today().strftime("%Y%m%d"), gpu_id, hier_lvl))
-    lc_filename = os.path.join(Glb.results_folder,
-                               "lc_clsf_from_isVisible_{}_gpu{}_hier{}.csv".format(date.today().strftime("%Y%m%d"), gpu_id, hier_lvl))
+    #model_filename = os.path.join(Glb.results_folder,
+    #                              "model_clsf_from_isVisible_{}_gpu{}_hier{}.h5".format(date.today().strftime("%Y%m%d"), gpu_id, hier_lvl))
+    #lc_filename = os.path.join(Glb.results_folder,
+    #                           "lc_clsf_from_isVisible_{}_gpu{}_hier{}.csv".format(date.today().strftime("%Y%m%d"), gpu_id, hier_lvl))
     # Create or load model
     if not load_existing:
         print ("Creating model")
@@ -77,8 +77,8 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
         model = prepModel (**prep_model_params)
     else:
         print ("Loading model")
-        #model_file_name = r"J:\Visible_models\6class\model_6classes_v" + str(version) + ".h5"
-        model = load_model(model_file_name)
+        #model_filename = r"J:\Visible_models\6class\model_6classes_v" + str(version) + ".h5"
+        model = load_model(model_filename)
         model.compile(loss='categorical_crossentropy',
                       optimizer=Adam(learning_rate=0.001), # default LR: 0.001
                       metrics=['accuracy'])
@@ -89,7 +89,7 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
                                            restore_best_weights=True)
     callback_csv_logger = CSVLogger(lc_filename, separator=",", append=False)
 
-    mcp_save = ModelCheckpoint(model_file_name, save_best_only=True, monitor='val_accuracy', mode='max')
+    mcp_save = ModelCheckpoint(model_filename, save_best_only=True, monitor='val_accuracy', mode='max')
 
     model.fit(train_iterator, steps_per_epoch=len(train_iterator), epochs=epochs, verbose=2,
                     validation_data=val_iterator, validation_steps=len(val_iterator),

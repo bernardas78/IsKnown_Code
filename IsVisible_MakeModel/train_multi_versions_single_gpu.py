@@ -2,7 +2,7 @@
 import Train_6classes_v1 as t_6_v1
 import numpy as np
 
-def train_on_single_gpu (gpu_id, hier_lvl):
+def train_on_single_gpu (gpu_id, model_filename, lc_filename, data_dir):
 
     start_version = 60
     end_version = 60
@@ -112,7 +112,9 @@ def train_on_single_gpu (gpu_id, hier_lvl):
                        "version": i,
                        "load_existing": load_existing,
                        "gpu_id": gpu_id,
-                       "hier_lvl": hier_lvl}
+                       "model_filename": model_filename,
+                       "lc_filename": lc_filename,
+                       "data_dir": data_dir}
         model = t_6_v1.trainModel( **params_dict )
         #model_file_name = r"J:\Visible_models\6class\model_6classes_v" + str(i) + ".h5"
         #model.save(model_file_name)
