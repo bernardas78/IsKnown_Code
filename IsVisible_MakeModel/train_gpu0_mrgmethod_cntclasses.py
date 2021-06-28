@@ -29,14 +29,14 @@ for i,row in df_traincombinations.iterrows():
 
     zip_filename = "{}_{}.7z".format(merge_method,str(cnt_classes) )
     src_zip = os.path.join(Glb.images_folder, "Mrg_A_NE_BalKerasAff102030_ZIP", zip_filename )
-    unzip_dest_dir = os.path.join(Glb.images_folder, "Bal_v14")
+    unzip_dest_dir = os.path.join(Glb.images_folder, "Mrg_A_NE_BalKerasAff102030", "Bal_v14")
 
     data_dir = os.path.join(unzip_dest_dir, "{}_{}".format(merge_method,str(cnt_classes) ) )
-    #print (model_filename)
-    #print (lc_filename)
-    #print (src_zip)
-    #print (unzip_dest_dir)
-    #print (data_dir)
+    print (model_filename)
+    print (lc_filename)
+    print (src_zip)
+    print (unzip_dest_dir)
+    print (data_dir)
 
     # Download 7z file from S3
     amazon_filename = r"c:\users\bciap\Desktop\amzon.csv"
@@ -60,11 +60,11 @@ for i,row in df_traincombinations.iterrows():
     #os.remove (src_zip)
 
     # Train
-    #for i in range(1):
-    #    model_clsf = train_multi_versions_single_gpu.train_on_single_gpu (gpu_id=gpu_id,
-    #                                                                      model_filename=model_filename,
-    #                                                                      lc_filename=lc_filename,
-    #                                                                      data_dir=data_dir)
+    for i in range(1):
+        model_clsf = train_multi_versions_single_gpu.train_on_single_gpu (gpu_id=gpu_id,
+                                                                          model_filename=model_filename,
+                                                                          lc_filename=lc_filename,
+                                                                          data_dir=data_dir)
 
     # Delete Data folder
     #shutil.rmtree(data_dir)

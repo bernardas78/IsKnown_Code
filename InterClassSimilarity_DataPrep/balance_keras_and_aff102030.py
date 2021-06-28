@@ -72,6 +72,8 @@ for mrg_meth_class_cnt_lvl in os.listdir(src_folder):
     for set_lvl in os.listdir(mrg_meth_class_cnt_folder):    # list Train, Val, Test
         set_lvl_folder = os.path.join(mrg_meth_class_cnt_folder,set_lvl)
 
+        #if set_lvl == "Test" or set_lvl == "Train":
+        #    continue
         # Balance up to max number of images in the set level
         if set_lvl=="Test":
             max_count_imgs_set_lvl = 0  # don't augment test set, just copy originals
@@ -83,6 +85,10 @@ for mrg_meth_class_cnt_lvl in os.listdir(src_folder):
             classcode_lvl_folder = os.path.join(set_lvl_folder,classcode_lvl)
             dest_classcode_lvl_folder = os.path.join(save_to_dir_template,mrg_meth_class_cnt_lvl,set_lvl,classcode_lvl)
             #print (classcode_lvl_folder)
+
+            #if os.path.exists(dest_classcode_lvl_folder):
+            #    print("Skipping {}".format(dest_classcode_lvl_folder))
+            #    continue
 
             augment_folder(src_classcode_lvl_folder=classcode_lvl_folder, dest_classcode_lvl_folder=dest_classcode_lvl_folder,
                            img_cnt=max_count_imgs_set_lvl, keras_or_aff="keras", copy_orig=True)

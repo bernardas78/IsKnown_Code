@@ -1,6 +1,9 @@
+import numpy as np
+import pandas as pd
+
 import Model_6classes_c5plus_d3_v1 as m_6classes_c5plus_d3_v1
 #import Model_6classes_c5plus_d3_v1_custom_loss as m_6classes_c5plus_d3_v1
-
+from sklearn.metrics import f1_score,accuracy_score
 
 from tensorflow.keras.callbacks import EarlyStopping, CSVLogger, ModelCheckpoint
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -51,7 +54,7 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
 
     train_iterator = Glb_Iterators.get_iterator(data_dir_train,"div255")
     val_iterator = Glb_Iterators.get_iterator(data_dir_val,"div255")
-    test_iterator = Glb_Iterators.get_iterator(data_dir_test,"div255")
+    test_iterator = Glb_Iterators.get_iterator(data_dir_test,"div255", shuffle=False) # dont shuffle in order to get proper actual/prediction pairs
 
     Softmax_size = len (train_iterator.class_indices)
     dense_sizes["d-1"] = Softmax_size
@@ -99,8 +102,25 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
     test_metrics = model.evaluate(test_iterator)
     print("Test: {}".format(test_metrics))
 
-    print("Evaluation on validation set (1 frame)")
-    val_metrics = model.evaluate(val_iterator)
-    print("Val: {}".format(val_metrics))
+    print ("Evaluating F1 test set (1 frame)")
+    y_pred = model.predict(test_iterator)
+    y_pred_classes = np.argmax(y_pred, axis=1)
+    y_true = test_iterator.classes
+    test_acc = accuracy_score(y_true=y_true, y_pred=y_pred_classes)
+    test_f1 = f1_score(y_true=y_true, y_pred=y_pred_classes, average='macro')
+    print ("acc:{}, f1:{}".format(test_acc, test_f1))
+
+    # metrics to csv
+    df_metrics = pd.DataFrame ( data={
+        "data_dir": [data_dir],
+        "test_acc": [test_acc],
+        "test_f1": [test_f1]
+    })
+    df_metrics_filename = os.path.join ( Glb.results_folder, "metrics_mrg.csv")
+    df_metrics.to_csv ( df_metrics_filename, index=False, header=False, mode='a')
+
+    #print("Evaluation on validation set (1 frame)")
+    #val_metrics = model.evaluate(val_iterator)
+    #print("Val: {}".format(val_metrics))
 
     return model
