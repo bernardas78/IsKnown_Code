@@ -18,6 +18,7 @@ class Glb:
         graphs_folder = '/home/bernardas/IsKnown_Results/Graph'
         tensorboard_logs_folder = '/home/bernardas/IsKnown_TBLogs'
         cache_folder = '/home/bernardas/IsKnown_Cache'
+        amzn_file = '/home/bernardas/amzon.csv'
         batch_size=256
     else:
         images_folder = 'A:/IsKnown_Images'
@@ -26,6 +27,7 @@ class Glb:
         graphs_folder = 'A:/IsKnown_Results/Graph'
         tensorboard_logs_folder = 'C:/IsKnown_TBLogs'
         cache_folder = 'C:/IsKnown_Cache'
+        amzn_file = 'c:/users/bciap/Desktop/amzon.csv'
         batch_size = 1024
 
 class Glb_Iterators:

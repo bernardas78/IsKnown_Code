@@ -11,7 +11,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
 from Globals.globalvars import Glb, Glb_Iterators
 import os
-from datetime import date
+from datetime import date, datetime
 
 modelVersions_dic = {
     "Model_6classes_c5plus_d3_v1": m_6classes_c5plus_d3_v1.prepModel
@@ -112,6 +112,8 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
 
     # metrics to csv
     df_metrics = pd.DataFrame ( data={
+        "gpu": [gpu_id],
+        "datetime": [datetime.now().strftime("%Y%m%d %H:%M:%S")],
         "data_dir": [data_dir],
         "test_acc": [test_acc],
         "test_f1": [test_f1]
