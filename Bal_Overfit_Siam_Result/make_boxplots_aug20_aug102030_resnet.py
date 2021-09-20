@@ -14,8 +14,9 @@ for aug_version in np.unique( df_metrics.aug_version):
      lst_x_labels.append(aug_version)
 
 plt.boxplot (lst_test_accs)
+plt.tick_params(axis='both', which='major', labelsize=14)
 plt.xticks(ticks=(np.arange(len(lst_x_labels)))+1, labels=lst_x_labels, rotation=90)
-plt.title ("Test accuracy ~ Affine augmentation parameters")
+plt.title ("Test accuracy ~ Affine augmentation parameters", fontsize=14, fontweight="bold")
 plt.tight_layout()
 plt.savefig("testacc_aug.png")
 plt.close()
