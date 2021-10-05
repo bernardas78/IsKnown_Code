@@ -62,7 +62,8 @@ for set_lvl in os.listdir(src_folder):    # list Train, Val, Test
     if set_lvl=="Test":
         max_count_imgs_set_lvl = 0  # don't augment test set, just copy originals
     else:
-        max_count_imgs_set_lvl = np.max( [ len( os.listdir(os.path.join(set_lvl_folder,classs) ) ) for classs in os.listdir(set_lvl_folder) ] )
+        #max_count_imgs_set_lvl = np.max( [ len( os.listdir(os.path.join(set_lvl_folder,classs) ) ) for classs in os.listdir(set_lvl_folder) ] )
+        max_count_imgs_set_lvl = 2000 if set_lvl == "Train" else 500  # approximately same as our dataset
     #print (set_lvl_folder+" "+str(max_count_imgs_set_lvl))
 
     for classcode_lvl in os.listdir(set_lvl_folder):    # list class codes (barcode or shortened)

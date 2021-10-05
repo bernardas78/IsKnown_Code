@@ -69,7 +69,7 @@ def prepModel( target_size, Softmax_size ) :
     model.add(Dense(Softmax_size, activation='softmax'))
 
     model.compile(loss='categorical_crossentropy',
-                  optimizer=Adam(lr=0.001), #'adam', # default LR: 0.001
+                  optimizer=Adam(lr=0.0010), #'adam', # default LR: 0.001
                   metrics=['accuracy'])
 
     return model
