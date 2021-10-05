@@ -59,8 +59,9 @@ for i,row in df_traincombinations.iterrows():
     # Unzip 7z file
     print ("Unzipping .7z...")
     now = datetime.now()
-    with py7zr.SevenZipFile(src_zip, 'r') as archive:
-        archive.extractall(path=unzip_dest_dir)
+    #with py7zr.SevenZipFile(src_zip, 'r') as archive:
+    #    archive.extractall(path=unzip_dest_dir)
+    os.system('/$HOME/bin/7zz x {} -o/$HOME/IsKnown_Images/Mrg_A_NE_BalKerasAff102030/Bal_v14/'.format(src_zip))
     print ("Unzipped in {} sec".format((datetime.now()-now).total_seconds()))
 
     # Delete 7z file

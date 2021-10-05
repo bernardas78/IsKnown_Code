@@ -51,8 +51,8 @@ for i,row in df_traincombinations.iterrows():
     )
     print ("Downloading .7z...")
     now = datetime.now()
-    #with open(src_zip,'wb') as f:
-    #    client.download_fileobj('test.bucket.for.test.machine', zip_filename, f)
+    with open(src_zip,'wb') as f:
+        client.download_fileobj('test.bucket.for.test.machine', zip_filename, f)
     print ("Downloaded in {} sec".format((datetime.now()-now).total_seconds()))
 
 
@@ -61,10 +61,11 @@ for i,row in df_traincombinations.iterrows():
     now = datetime.now()
     #with py7zr.SevenZipFile(src_zip, 'r') as archive:
     #    archive.extractall(path=unzip_dest_dir)
+    os.system('/$HOME/bin/7zz x {} -o/$HOME/IsKnown_Images/Mrg_A_NE_BalKerasAff102030/Bal_v14/'.format(src_zip))
     print ("Unzipped in {} sec".format((datetime.now()-now).total_seconds()))
 
     # Delete 7z file
-    #os.remove (src_zip)
+    os.remove (src_zip)
 
     # Train
     for i in range(1):
@@ -76,5 +77,5 @@ for i,row in df_traincombinations.iterrows():
     # Delete Data folder
     print ("Removing Data folder ...")
     now = datetime.now()
-    #shutil.rmtree(data_dir)
+    shutil.rmtree(data_dir)
     print ("Removed in {} sec".format((datetime.now()-now).total_seconds()))
