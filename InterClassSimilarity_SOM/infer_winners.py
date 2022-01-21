@@ -18,9 +18,9 @@ import time
 #do_predict = True
 #do_piecharts = True
 
-def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_clstr_str, do_clstr_dist, incl_filenames):
+def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_clstr_str, do_clstr_dist, incl_filenames, trained_on_set_name):
     # SOM clusterer
-    som_filename = os.path.join(Glb.results_folder, "som_clusterer_{}x{}_hier{}".format(dim_size, dim_size, hier_lvl) )
+    som_filename = os.path.join(Glb.results_folder, "som_clusterer_{}x{}_hier{}_{}.h5".format(dim_size, dim_size, hier_lvl, trained_on_set_name) )
 
     # Results file: assigned clusters
     clusters_filename_pattern = "som_clstrs_{}_{}x{}_hier{}.h5"
@@ -39,6 +39,7 @@ def infer_winners (set_names, dim_size, hier_lvl, do_predict, do_piecharts, do_c
 
             # Inference: get winner neurons (i.e. cluster asssignment) for each sample
             now = time.time()
+            print ("starting to predict")
             pred_winner_neurons = mysom.winners ( orange_tab.X )
             print("Prdicted winners in {} seconds".format(time.time() - now))
 
