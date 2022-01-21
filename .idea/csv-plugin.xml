@@ -108,10 +108,38 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\IsVisible_MakeModel\comb_mergemethod_classcnt_gpu1.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\LastDense_Dist\ListFiles.csv">
           <value>
             <Attribute>
               <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\LastDense_Dist\top1_preds.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Prototype_preLastDense_Dist\distances.backup20201012.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Prototype_preLastDense_Dist\distances.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>

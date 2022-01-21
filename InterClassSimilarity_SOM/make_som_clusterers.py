@@ -17,18 +17,18 @@ from InterClassSimilarity_SOM.som_common import loadActivations, makeOrangeTable
 #set_name = "Val"
 #set_name = "Train"
 
-def make_som_clusterers( hier_lvl, dim_size, n_iters, incl_filenames):
+def make_som_clusterers( hier_lvl, dim_size, n_iters, incl_filenames, set_name):
     #dim_size = 15 #8
     l_rate = 0.5
     #n_iters = 20
 
 
     # SOM clusterer
-    som_filename = os.path.join(Glb.results_folder, "som_clusterer_{}x{}_hier{}".format(dim_size, dim_size, hier_lvl) )
+    som_filename = os.path.join(Glb.results_folder, "som_clusterer_{}x{}_hier{}_{}.h5".format(dim_size, dim_size, hier_lvl, set_name) )
 
     # Load train activations
     #train_orange_tab,_ = loadActivations("Train", hier_lvl=hier_lvl)
-    tuple_contents = loadActivations("Train", hier_lvl=hier_lvl, incl_filenames=incl_filenames)
+    tuple_contents = loadActivations(set_name, hier_lvl=hier_lvl, incl_filenames=incl_filenames)
     act_prelast, lbls = tuple_contents[0], tuple_contents[1]
     #act_prelast,lbls = loadActivations("Train", hier_lvl=hier_lvl)
 

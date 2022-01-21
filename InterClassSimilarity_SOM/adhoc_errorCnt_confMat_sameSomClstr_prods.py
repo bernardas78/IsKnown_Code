@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import itertools
 from sklearn.metrics import confusion_matrix
+from matplotlib import pyplot as plt
 
 hier_lvl = 0
 
@@ -17,8 +18,8 @@ prods=[57,42]
 set_name="Test"
 #set_name="Val"
 
-df_prodnames = pd.read_csv("df_prods_194.csv", header=0)["product"].tolist()
-df_classes = pd.read_csv("df_prods_194.csv", header=0)["class"].tolist()
+df_prodnames = pd.read_csv("df_prods_194_translated.csv", header=0)["product"].tolist()
+df_classes = pd.read_csv("df_prods_194_translated.csv", header=0)["class"].tolist()
 
 model_filename = os.path.join( Glb.results_folder, "model_clsf_from_isVisible_20210415_gpu1.h5")  # 83% test accuracy  #Hier-0
 model = load_model(model_filename)
@@ -55,14 +56,38 @@ for i in range(total_classes):
         conf_mat[i, j] += conf_mat[j, i]
         conf_mat[j, i] = 0
 
-# Biggest 10 error contributors
-print ("Top 10 error contributors")
-for top_i in range(10):
+
+lst_pct_thisErrors_vs_totalErrors = []
+prod_name_pairs = []
+
+# Biggest 21 error contributors
+print ("Top 21 error contributors")
+#for top_i in range(21):
+top_i=0
+while np.sum(conf_mat>0):
     ind_ravel = np.argmax(conf_mat)
     inds = np.unravel_index( ind_ravel, (total_classes,total_classes))
     errors_between_prods = conf_mat [inds]
     pct_thisErrors_vs_totalErrors = errors_between_prods / total_errors*100
-    prod_i_name,prod_j_name = df_prodnames[inds[0]][:15], df_prodnames[inds[1]][:15]
+    prod_i_name,prod_j_name = df_prodnames[inds[0]][:100], df_prodnames[inds[1]][:100]
     prod_i_class,prod_j_class = df_classes[inds[0]], df_classes[inds[1]]
     print ("errors between [{}({}),   {}({})] contribute {}/{} ({} pct)".format (prod_i_name,prod_i_class,prod_j_name,prod_j_class,errors_between_prods,total_errors, pct_thisErrors_vs_totalErrors))
     conf_mat [inds] = 0
+    # accum data for pie chart
+    lst_pct_thisErrors_vs_totalErrors.append(pct_thisErrors_vs_totalErrors)
+    prod_name_pairs.append( "{}/{}".format(prod_i_name,prod_j_name) if top_i<5 else "")
+    top_i += 1
+
+# Append other (not top n)
+#lst_pct_thisErrors_vs_totalErrors.append( np.sum(conf_mat)/total_errors*100 )
+#prod_name_pairs.append("Other")
+#fig1, ax1 = plt.subplots()
+#plt.pie(lst_pct_thisErrors_vs_totalErrors, labels=prod_name_pairs, autopct='%1.1f%%', shadow=True, startangle=90)
+plt.pie(lst_pct_thisErrors_vs_totalErrors, labels=prod_name_pairs, autopct=lambda pct:r"{:.1f}%".format(pct) if pct>2.4 else "", shadow=True, startangle=90)
+#plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.title ("Biggest error contributors", fontsize=14, fontweight="bold")
+plt.tight_layout()
+
+
+plt.savefig("temp/pie_top10_err_contributors.png")
+plt.close()

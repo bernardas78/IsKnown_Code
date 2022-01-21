@@ -59,18 +59,24 @@ for ver_lvl in os.listdir(src_folder):
     for hier_lvl in os.listdir(ver_lvl_full_folder): # list Hier-x
         hier_lvl_full_folder = os.path.join(ver_lvl_full_folder,hier_lvl)
 
+        if (ver_lvl!="Bal_v14" or hier_lvl!="Ind-0"):
+            continue
+
         #print (hier_lvl_full_folder)
         for set_lvl in os.listdir(hier_lvl_full_folder):    # list Train, Val, Test
             set_lvl_folder = os.path.join(hier_lvl_full_folder,set_lvl)
 
             #if set_lvl!="Test":
             #    continue
+            #print ("ver_lvl:{}, hier_lvl:{},set_lvl:{}".format(ver_lvl,hier_lvl,set_lvl))
+            #continue
 
             # Balance up to max number of images in the set level
             if set_lvl=="Test":
                 max_count_imgs_set_lvl = 0  # don't augment test set, just copy originals
             else:
                 max_count_imgs_set_lvl = np.max( [ len( os.listdir(os.path.join(set_lvl_folder,classs) ) ) for classs in os.listdir(set_lvl_folder) ] )
+            max_count_imgs_set_lvl = 140 if set_lvl=="Test" else 440 if set_lvl=="Train" else 120
             #print (set_lvl_folder+" "+str(max_count_imgs_set_lvl))
 
             for classcode_lvl in os.listdir(set_lvl_folder):    # list class codes (barcode or shortened)

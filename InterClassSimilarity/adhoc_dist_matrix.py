@@ -134,3 +134,29 @@ sns.set(font_scale=0.3)
 ax = sns.heatmap(dist_mat, cbar=False, xticklabels=prod_names, yticklabels=prod_names, square=True)
 plt.savefig(r"D:\IsKnown_Code\InterClassSimilarity\temp\dist_mat.png")
 plt.close()
+
+
+# vector indices in matrix: tuple ([0,0,0,...191,191,192],
+#                                  [0,1,2,...191,192,192])
+vec_inds_in_mat = np.triu_indices(dist_mat.shape[0]-1)
+
+# Top 5 smallest distance having products
+smallest_dist_inds = np.argsort(dis_mat_vectorized)[:5]
+
+# Translate distance to similarity
+similarity_mat_vectorized = 1/dis_mat_vectorized
+mu_sim,std_sim = np.mean(similarity_mat_vectorized), np.std(similarity_mat_vectorized)
+
+# show these items and their distance
+for smallest_dist_ind in smallest_dist_inds:
+    smallest_dist_ind_inds_in_matrix = vec_inds_in_mat[0][smallest_dist_ind], vec_inds_in_mat[1][smallest_dist_ind]+1
+    #print (smallest_dist_ind_inds_in_matrix)
+    #print("small dist:{}".format(dist_mat[smallest_dist_ind_inds_in_matrix[0], smallest_dist_ind_inds_in_matrix[1]]))
+    print("high sim:{}".format(similarity_mat_vectorized[smallest_dist_ind]))
+    print (" {}/{}".format(prod_names[smallest_dist_ind_inds_in_matrix[0]],prod_names[smallest_dist_ind_inds_in_matrix[1]]))
+    print (" {}/{}".format(classnames[smallest_dist_ind_inds_in_matrix[0]],classnames[smallest_dist_ind_inds_in_matrix[1]]))
+
+#plt.hist((similarity_mat_vectorized-mu_sim)/std_sim, bins=100)
+#plt.xticks(size = 12)
+#plt.yticks(size = 12)
+#plt.show()
