@@ -15,6 +15,9 @@ clusters_filename_pattern = "som_clstrs_{}_{}x{}_hier{}.h5"
 cluster_structure_folder_pattern = "{}_{}x{}_hier{}"
 cluster_structure_filename_pattern = "purity_{}_[{}_{}].csv"
 
+show_labels = False
+max_cnt_classes = 194   #5
+pct_other = 0.99 #0.8
 
 df_prodnames = pd.read_csv("df_prods_194.csv", header=0)["product"].tolist()
 
@@ -75,8 +78,8 @@ def purity_pie(set_name, dim_size,hier_lvl, do_clstr_str):
 
                 # top 80% containing classes
                 cum_probs = np.cumsum([item[1]/len(this_neuron_lbls) for item in most_common_classes])
-                max_cnt = np.where(cum_probs > 0.8)[0][0] + 1
-                max_cnt = np.minimum(max_cnt,5)
+                max_cnt = np.where(cum_probs >= pct_other)[0][0] + 1
+                max_cnt = np.minimum(max_cnt,max_cnt_classes)
                 #print ("i={},j={},max_cnt={}".format(i,j,max_cnt))
                 #if max_cnt==0:
                 #    print (cum_probs[:4])
@@ -92,6 +95,7 @@ def purity_pie(set_name, dim_size,hier_lvl, do_clstr_str):
 
                 #print ("i={}, j={}, Len={}".format(i,j,len(this_neuron_lbls)))
                 radius = np.sqrt( len(this_neuron_lbls) / len(lbls)) * dim_size
+                labels=labels if show_labels else None
                 axes[i,j].pie(sizes, labels=labels, colors=colors, radius=radius, textprops={'fontsize': 6})#, textprops={'fontsize': 5}) #, autopct='%1.1f%%')
             else:
                 #axes[i, j].set_xticks([])
@@ -100,6 +104,7 @@ def purity_pie(set_name, dim_size,hier_lvl, do_clstr_str):
 
     #plt.show()
     purity_filename = os.path.join (Glb.graphs_folder, purity_filename_pattern.format(set_name, dim_size, dim_size, hier_lvl) )
+    plt.suptitle("SOM cluster structure", fontsize=14, fontweight="bold")
     plt.savefig(purity_filename)
     plt.close()
     print ("Saved piechart in {}".format(purity_filename))
