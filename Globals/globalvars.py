@@ -18,6 +18,7 @@ class Glb:
         graphs_folder = '/home/bernardas/IsKnown_Results/Graph'
         tensorboard_logs_folder = '/home/bernardas/IsKnown_TBLogs'
         cache_folder = '/home/bernardas/IsKnown_Cache'
+        class_mixture_models_folder = '/home/bernardas/ClassMixture_Models'
         amzn_file = '/home/bernardas/amzon.csv'
         batch_size=256
     else:
@@ -27,6 +28,7 @@ class Glb:
         graphs_folder = 'A:/IsKnown_Results/Graph'
         tensorboard_logs_folder = 'C:/IsKnown_TBLogs'
         cache_folder = 'C:/IsKnown_Cache'
+        class_mixture_models_folder = 'A:/ClassMixture_Models'
         amzn_file = 'c:/users/bciap/Desktop/amzon.csv'
         batch_size = 1024
 
