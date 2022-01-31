@@ -7,13 +7,14 @@ import random
 import fnmatch
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess_input
-
+import os
 
 class Glb:
     #images_folder = '/home/bernardas/IsKnown_Images' if platform=='linux' else 'C:/IsKnown_Images_IsVisible'
 
     if platform=='linux':
         images_folder = '/home/bernardas/IsKnown_Images'
+        images_balanced_folder = os.path.join(images_folder,'Aff_NE_Balanced')
         results_folder = '/home/bernardas/IsKnown_Results'
         graphs_folder = '/home/bernardas/IsKnown_Results/Graph'
         tensorboard_logs_folder = '/home/bernardas/IsKnown_TBLogs'
@@ -22,8 +23,9 @@ class Glb:
         amzn_file = '/home/bernardas/amzon.csv'
         batch_size=256
     else:
-        #images_folder = 'A:/IsKnown_Images'
-        images_folder = 'C:/IsKnown_Images_IsVisible'
+        images_folder = 'A:/IsKnown_Images'
+        #images_folder = 'C:/IsKnown_Images_IsVisible'
+        images_balanced_folder = 'C:/IsKnown_Images_IsVisible'
         results_folder = 'A:/IsKnown_Results'
         graphs_folder = 'A:/IsKnown_Results/Graph'
         tensorboard_logs_folder = 'C:/IsKnown_TBLogs'
