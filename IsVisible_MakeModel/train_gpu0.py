@@ -3,7 +3,7 @@ import os
 from datetime import date
 from Globals.globalvars import Glb
 
-gpu_id = 0
+gpu_id = 1
 hier_lvl = 0
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
