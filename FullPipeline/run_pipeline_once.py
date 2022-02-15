@@ -27,5 +27,5 @@ def run_pipeline_once(cntr):
     os.system( " ".join(["python",filename]) )
 
 
-for cntr in range(9):
+for cntr in range(4):
     run_pipeline_once(cntr)
