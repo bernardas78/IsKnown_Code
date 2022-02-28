@@ -1,0 +1,11 @@
+gpu,date_ended,dir,test_acc,test_fscore
+1,20220202 07:02:02,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.8081373646883165,0.5104808600655902
+1,20220204 18:13:28,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.8275475923852184,0.528868335241739
+1,20220206 08:50:05,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.81317655841732,0.5020053609657716
+1,20220210 01:20:10,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.7872340425531915,0.4675402109490922
+1,20220216 04:59:09,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.8116834639790966,0.4599400233332295
+0,20220217 05:08:11,c:/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.80142,0.483617
+1,20220217 21:21:47,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.8030981709593131,0.49386624648615746
+1,20220218 20:23:22,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.7851810377006345,0.47779810586059956
+1,20220220 04:42:58,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.8103770063456514,0.4654068246123079
+1,20220221 07:45:53,/home/bernardas/IsKnown_Images/Aff_NE_Balanced/Bal_v14/Ind-0,0.8049645390070922,0.49639073278596224
