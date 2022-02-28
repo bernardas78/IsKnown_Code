@@ -1,7 +1,7 @@
 from Globals.globalvars import Glb
 import os
 
-def run_pipeline_once():
+def run_pipeline_once(cntr):
     print (Glb.results_folder)
     # remove empty images
     filename = "../DataPrep_EmptyNot/classify_affine_notEmpty.py"
@@ -13,16 +13,19 @@ def run_pipeline_once():
 
 
     # split train/val/test
-    #Data_Prep_Affine\A.V.NE.split_train_val_test.ps1
+    filename= "../Data_Prep_Affine/A.V.NE.split_train_val_test.py"
+    os.system( " ".join(["python",filename]) )
 
     # balance (aff+persp)
-    #Data_Prep_Affine\A.V.NE.balance.py
-    #Data_Prep_Affine\A.V.NE.balance_affAugment.py
+    filename= "../Data_Prep_Affine/A.V.NE.balance_pipe.py"
+    os.system( " ".join(["python",filename]) )
+    filename= "../Data_Prep_Affine/A.V.NE.balance_affAugment_pipe.py"
+    os.system( " ".join(["python",filename]) )
 
     # train
-    #IsVisible_MakeModel/train_gpu0.py
+    filename= "../IsVisible_MakeModel/train_gpu0.py"
+    os.system( " ".join(["python",filename]) )
 
-    # record metrics:
-    #Not_implemented
 
-run_pipeline_once()
+for cntr in range(4):
+    run_pipeline_once(cntr)

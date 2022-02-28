@@ -2,7 +2,7 @@ import  train_multi_versions_single_gpu
 import os
 
 gpu_id = 1
-hier_lvl = 4
+hier_lvl = 0
 
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"]=str(gpu_id)
