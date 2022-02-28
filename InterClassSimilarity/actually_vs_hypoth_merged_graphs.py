@@ -8,6 +8,8 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 
+do_include_bc_structure=False
+
 # read Actually merged results file
 column_names = ["gpu","datetime","data_dir","test_acc","test_f1"]
 df_metrics = pd.read_csv ("metrics_mrg.csv", header=None, names=column_names)
@@ -53,13 +55,14 @@ x = class_cnt
 plt.plot(x, hypot_acc_emb_dist, label="Embeddings distance", color=color_codes[labels.index('emb_dist')] )
 plt.plot(x, hypot_acc_conf_mat, label="Error contribution", color=color_codes[labels.index('conf_mat')])
 plt.plot(x, hypot_acc_purity_impr, label="SOM purity", color=color_codes[labels.index('som_purity_impr')])
-plt.plot(bc_structure_cnt_classes, bc_structure_acc, label="Barcode hierarchy", color="red")
+if do_include_bc_structure:
+    plt.plot(bc_structure_cnt_classes, bc_structure_acc, label="Barcode hierarchy", color="red")
 plt.xlabel("Number of classes")
 plt.ylabel("Accuracy")
 plt.legend(loc="upper right")
 plt.title("Accuracy by merging classes")
 #plt.show()
-plt.savefig('actual_vs_hypth_merged_acc.jpg')
+plt.savefig('actual_vs_hypth_merged_acc{}.jpg'.format("_inclBcHier" if do_include_bc_structure else ""))
 plt.close()
 
 
@@ -71,11 +74,12 @@ x = class_cnt
 plt.plot(x, hypot_f1_emb_dist, label="Embeddings distance", color=color_codes[labels.index('emb_dist')] )
 plt.plot(x, hypot_f1_conf_mat, label="Error contribution", color=color_codes[labels.index('conf_mat')])
 plt.plot(x, hypot_f1_purity_impr, label="SOM purity", color=color_codes[labels.index('som_purity_impr')])
-plt.plot(bc_structure_cnt_classes, bc_structure_f1, label="Barcode hierarchy", color="red")
+if do_include_bc_structure:
+    plt.plot(bc_structure_cnt_classes, bc_structure_f1, label="Barcode hierarchy", color="red")
 plt.xlabel("Number of classes")
 plt.ylabel("F-score")
 plt.legend(loc="upper right")
 plt.title("F-score by merging classes")
 #plt.show()
-plt.savefig('actual_vs_hypth_merged_f1.jpg')
+plt.savefig('actual_vs_hypth_merged_f1{}.jpg'.format("_inclBcHier" if do_include_bc_structure else ""))
 plt.close()

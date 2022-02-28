@@ -104,7 +104,7 @@ def purity_pie(set_name, dim_size,hier_lvl, do_clstr_str):
 
     #plt.show()
     purity_filename = os.path.join (Glb.graphs_folder, purity_filename_pattern.format(set_name, dim_size, dim_size, hier_lvl) )
-    plt.suptitle("SOM cluster structure", fontsize=14, fontweight="bold")
+    #plt.suptitle("SOM cluster structure", fontsize=14, fontweight="bold")
     plt.savefig(purity_filename)
     plt.close()
     print ("Saved piechart in {}".format(purity_filename))
