@@ -10,8 +10,13 @@ lst_x_labels = []
 metrics_file = r"../Bal_Overfit_Siam_Result/metrics_resnet_vs_isVisible.csv"
 df_metrics_no_abl = pd.read_csv(metrics_file)
 df_metrics_no_abl = df_metrics_no_abl[ df_metrics_no_abl.model_version=="IsVisible" ]
-lst_test_accs.append(df_metrics_no_abl.test_acc.tolist())
-#lst_x_labels.append ( np.repeat( "Empty, Invisible\nRemoved", len(df_metrics_no_abl.test_acc)) )
+#lst_test_accs.append(df_metrics_no_abl.test_acc.tolist())
+#lst_x_labels.append ( "Empty, Invisible\nRemoved (no resample)" )
+
+# "visibility" architecture, no ablation (data resample)
+abl_visible_file = "metrics_data_resplit.csv"
+df_metrics_visible = pd.read_csv(abl_visible_file)
+lst_test_accs.append(df_metrics_visible.test_acc.tolist())
 lst_x_labels.append ( "Empty, Invisible\nRemoved" )
 
 # ablation - empty
