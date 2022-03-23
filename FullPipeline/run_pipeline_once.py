@@ -1,3 +1,5 @@
+import glob
+
 from Globals.globalvars import Glb
 import os
 
@@ -14,18 +16,22 @@ def run_pipeline_once(cntr):
 
     # split train/val/test
     filename= "../Data_Prep_Affine/A.V.NE.split_train_val_test.py"
-    os.system( " ".join(["python",filename]) )
+    #os.system( " ".join(["python",filename]) )
 
     # balance (aff+persp)
     filename= "../Data_Prep_Affine/A.V.NE.balance_pipe.py"
-    os.system( " ".join(["python",filename]) )
+    #os.system( " ".join(["python",filename]) )
     filename= "../Data_Prep_Affine/A.V.NE.balance_affAugment_pipe.py"
-    os.system( " ".join(["python",filename]) )
+    #os.system( " ".join(["python",filename'/home/bernardas/]) )
 
     # train
-    filename= "../IsVisible_MakeModel/train_gpu0.py"
+    doEffNet=True
+    if doEffNet:
+        filename = "../../keras-efficientnets/test.py " + Glb.images_balanced_folder + "/Bal_v14/Ind-0"
+    else:
+        filename = "../IsVisible_MakeModel/train_gpu0.py"
     os.system( " ".join(["python",filename]) )
 
 
-for cntr in range(4):
+for cntr in range(1):
     run_pipeline_once(cntr)

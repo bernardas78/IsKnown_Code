@@ -14,14 +14,29 @@ class Glb:
     #images_folder = '/home/bernardas/IsKnown_Images' if platform=='linux' else 'C:/IsKnown_Images_IsVisible'
 
     if platform=='linux':
-        images_folder = '/home/bernardas/IsKnown_Images'
+        if os.path.exists('/home/bernardas'):
+            home_folder = '/home/bernardas'
+        elif os.path.exists('/scratch/lustre/home/mif28830'):
+            home_folder = '/scratch/lustre/home/mif28830'
+        else:
+            raise "globalvars.py: home folder not found"
+
+        images_folder = os.path.join(home_folder,'IsKnown_Images')
         images_balanced_folder = os.path.join(images_folder,'Aff_NE_Balanced')
-        results_folder = '/home/bernardas/IsKnown_Results'
-        graphs_folder = '/home/bernardas/IsKnown_Results/Graph'
-        tensorboard_logs_folder = '/home/bernardas/IsKnown_TBLogs'
-        cache_folder = '/home/bernardas/IsKnown_Cache'
-        class_mixture_models_folder = '/home/bernardas/ClassMixture_Models'
-        amzn_file = '/home/bernardas/amzon.csv'
+        results_folder = os.path.join(home_folder,'IsKnown_Results')
+        graphs_folder = os.path.join(home_folder,'IsKnown_Results/Graph')
+        tensorboard_logs_folder = os.path.join(home_folder,'IsKnown_TBLogs')
+        cache_folder = os.path.join(home_folder,'IsKnown_Cache')
+        class_mixture_models_folder = os.path.join(home_folder,'ClassMixture_Models')
+        amzn_file = os.path.join(home_folder,'amzon.csv')
+        #images_folder = '/home/bernardas/IsKnown_Images'
+        #images_balanced_folder = os.path.join(images_folder,'Aff_NE_Balanced')
+        #results_folder = '/home/bernardas/IsKnown_Results'
+        #graphs_folder = '/home/bernardas/IsKnown_Results/Graph'
+        #tensorboard_logs_folder = '/home/bernardas/IsKnown_TBLogs'
+        #cache_folder = '/home/bernardas/IsKnown_Cache'
+        #class_mixture_models_folder = '/home/bernardas/ClassMixture_Models'
+        #amzn_file = '/home/bernardas/amzon.csv'
         batch_size=256
     elif socket.gethostname() == 'DESKTOP-5L0SIAC':
         images_folder = 'A:/IsKnown_Images'
