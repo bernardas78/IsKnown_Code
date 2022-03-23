@@ -62,6 +62,7 @@ class Conf_Mat:
                 y_pred = np.append(y_pred, lbl)
 
         # Draw confusion matrix
+        plt.figure(figsize=(int(len(prod_names)/15), int(len(prod_names))/15), dpi=80)
         conf_mat = confusion_matrix(y_true=y_true, y_pred=y_pred)
         print ("Shape: {}".format(conf_mat.shape))
         ax = sns.heatmap(conf_mat, annot=True, cbar=False,annot_kws={'size':5}, fmt='g')
