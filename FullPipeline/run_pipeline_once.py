@@ -16,13 +16,13 @@ def run_pipeline_once(cntr):
 
     # split train/val/test
     filename= "../Data_Prep_Affine/A.V.NE.split_train_val_test.py"
-    #os.system( " ".join(["python",filename]) )
+    os.system( " ".join(["python",filename]) )
 
     # balance (aff+persp)
     filename= "../Data_Prep_Affine/A.V.NE.balance_pipe.py"
-    #os.system( " ".join(["python",filename]) )
+    os.system( " ".join(["python",filename]) )
     filename= "../Data_Prep_Affine/A.V.NE.balance_affAugment_pipe.py"
-    #os.system( " ".join(["python",filename'/home/bernardas/]) )
+    os.system( " ".join(["python",filename]) )
 
     # train
     doEffNet=True
