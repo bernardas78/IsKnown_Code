@@ -1,7 +1,13 @@
-from Globals.globalvars import Glb
 import os
 import random
 import shutil
+import sys
+
+#print ("SPLIT CWD:"+os.getcwd())
+sys.path.append( os.path.split( os.getcwd() )[0] )
+sys.path.append(os.getcwd())
+
+from Globals.globalvars import Glb
 
 # Source directory where barcode folders are located
 images_folder = os.path.join ( Glb.images_folder, "Cleaned_Aff_NE_AutoVisible", "Bal_v14" )
@@ -34,7 +40,6 @@ for barcode in os.listdir(images_folder):
     actual_train=0
     actual_val=0
     actual_test=0
-    #
 
     for filename in barcode_filenames:
         # copy each file to a proper set's folder
@@ -56,3 +61,5 @@ for barcode in os.listdir(images_folder):
             os.makedirs(dest_folder_full)
         full_filename = os.path.join(barcode_dir,filename)
         shutil.copy (full_filename, dest_folder_full)
+
+print ("Finished SPLIT train/val/test")

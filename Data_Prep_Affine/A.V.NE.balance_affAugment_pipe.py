@@ -8,6 +8,12 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import shutil
 import os
 import numpy as np
+import sys
+
+#print ("BALANCE AFF CWD:"+os.getcwd())
+sys.path.append( os.path.split( os.getcwd() )[0] )
+sys.path.append(os.getcwd())
+
 from affSequence import affSequence
 from Globals.globalvars import Glb
 
