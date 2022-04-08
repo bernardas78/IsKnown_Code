@@ -3,7 +3,9 @@ import numpy as np
 from scipy.cluster.hierarchy import linkage, dendrogram
 from matplotlib import pyplot as plt
 
-df_prods = pd.read_csv ('dendrogramai.csv', header=None, names=["ProductName","ProductCode","Cnt"])
+#df_prods = pd.read_csv ('dendrogramai.csv', header=None, names=["ProductName","ProductCode","Cnt"])
+df_prods = pd.read_csv ('dendrogramai_IsKnownImages_Affine.csv', header=None, names=["ProductName","ProductCode","Cnt"])
+
 cnt_prods = len(df_prods)
 
 mat_dist = np.zeros ((cnt_prods,cnt_prods), dtype=float)

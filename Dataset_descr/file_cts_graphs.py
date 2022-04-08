@@ -31,9 +31,9 @@ cat_names_bycat = df_prods_cnt_catname_grouped.index.tolist()
 
 plt.pie(file_cnt_bycat, labels=cat_names_bycat, autopct=lambda pct:r"{:.1f}%".format(pct) if pct>2.4 else "", shadow=True, startangle=90,  labeldistance=None)
 plt.title ("Image count by category", fontsize=14, fontweight="bold")
-plt.legend(loc=[0.8,0])
+plt.legend(loc=[1.0,0])
 plt.tight_layout()
-plt.savefig('filecnt_by_cat.png')
+plt.savefig('filecnt_by_cat.png', bbox_inches='tight')
 plt.close()
 
 # categories products count
@@ -42,8 +42,9 @@ bc_cnt_bycat = df_prods_bcs_catname_grouped.barcode["count"].tolist()
 cat_names_bycat = df_prods_bcs_catname_grouped.index.tolist()
 
 plt.pie(bc_cnt_bycat, labels=cat_names_bycat, autopct=lambda pct:r"{:.1f}%".format(pct) if pct>2.4 else "", shadow=True, startangle=90,  labeldistance=None)
+plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
 plt.title ("Product count by category", fontsize=14, fontweight="bold")
-plt.legend(loc=[0.8,0])
+#plt.legend(loc=[0.8,0])
 plt.tight_layout()
-plt.savefig('bccnt_by_cat.png')
+plt.savefig('bccnt_by_cat.png', bbox_inches='tight')
 plt.close()

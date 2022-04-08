@@ -6,7 +6,7 @@ metrics_file = r"metrics_resnet_vs_isVisible.csv"
 
 df_metrics = pd.read_csv(metrics_file)
 
-lbl_models = {"Resnet50": "Resnet50", "IsVisible": "Authors'\nVisibility\narchitecture", "autoenc": "Autoencoder\nbased"}
+lbl_models = {"EffNet": "EfficientNet\nBO", "Resnet50": "Resnet50", "IsVisible": "Authors'\nVisibility\narchitecture", "autoenc": "Autoencoder\nbased"}
 lst_test_accs = []
 lst_x_labels = []
 for model_version in np.unique( df_metrics.model_version):
