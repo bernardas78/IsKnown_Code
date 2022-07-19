@@ -173,3 +173,123 @@ dst_pts["24_7"] = np.array( [
     [  0., 250.]] ).astype(np.float32)
 
 
+src_pts["UTENA_KUPISKIO_SCO21"] = np.array([
+       [37,247],
+       [360,314],
+       [580,640],
+       [75,640]]).astype(np.float32)
+
+src_pts["UTENA_KUPISKIO_SCO22"] = np.array([
+       [10,255],
+       [350,280],
+       [585,570],
+       [150,750]]).astype(np.float32)
+
+src_pts["UTENA_KUPISKIO_SCO23"] = np.array([
+       [20,325],
+       [360,340],
+       [570,580],
+       [120,730]]).astype(np.float32)
+
+src_pts["UTENA_KUPISKIO_SCO24"] = np.array([
+       [25,250],
+       [355,275],
+       [600,560],
+       [145,750]]).astype(np.float32)
+
+src_pts["UTENA_KUPISKIO_SCO26"] = np.array([
+       [20,290],
+       [340,335],
+       [530,615],
+       [75,680]]).astype(np.float32)
+
+src_pts["UTENA_KUPISKIO_SCO27"] = np.array([
+       [5,300],
+       [340,310],
+       [580,595],
+       [90,680]]).astype(np.float32)
+
+src_pts["UTENA_KUPISKIO_SCO28"] = np.array([
+       [30,330],
+       [360,350],
+       [570,600],
+       [100,710]]).astype(np.float32)
+
+src_pts["VILNIUS_ASANAVICIUTES_SCO21"] = np.array([
+       [30,250],
+       [370,265],
+       [850,820],
+       [150,730]]).astype(np.float32)
+
+src_pts["VILNIUS_ASANAVICIUTES_SCO22"] = np.array([
+       [20,255],
+       [340,260],
+       [630,590],
+       [160,730]]).astype(np.float32)
+
+src_pts["VILNIUS_ASANAVICIUTES_SCO23"] = np.array([
+       [-70,200],
+       [270,220],
+       [530,530],
+       [100,770]]).astype(np.float32)
+
+src_pts["VILNIUS_ASANAVICIUTES_SCO24"] = np.array([
+       [110,310],
+       [420,380],
+       [560,620],
+       [130,670]]).astype(np.float32)
+
+src_pts["VILNIUS_JUSTINISKIU_SCO21"] = np.array([
+       [20,235],
+       [350,225],
+       [640,525],
+       [200,735]]).astype(np.float32)
+
+src_pts["VILNIUS_JUSTINISKIU_SCO22"] = np.array([
+       [10,270],
+       [350,240],
+       [610,540],
+       [200,720]]).astype(np.float32)
+
+src_pts["VILNIUS_JUSTINISKIU_SCO23"] = np.array([
+       [0,260],
+       [330,260],
+       [600,580],
+       [160,730]]).astype(np.float32)
+
+src_pts["VILNIUS_JUSTINISKIU_SCO24"] = np.array([
+       [50,170],
+       [380,200],
+       [620,550],
+       [170,720]]).astype(np.float32)
+
+src_pts["VILNIUS_JUSTINISKIU_SCO25"] = np.array([
+       [180,0],
+       [520,0],
+       [540,260],
+       [170,270]]).astype(np.float32)
+
+
+src_pts["VILNIUS_RYGOS_SCO21"] = np.array([
+       [30,270],
+       [360,280],
+       [600,580],
+       [150,730]]).astype(np.float32)
+
+src_pts["VILNIUS_RYGOS_SCO22"] = np.array([
+       [40,270],
+       [360,280],
+       [600,580],
+       [150,730]]).astype(np.float32)
+
+src_pts["VILNIUS_RYGOS_SCO24"] = np.array([
+       [40,280],
+       [370,300],
+       [590,580],
+       [150,730]]).astype(np.float32)
+
+#src_pts["VILNIUS_RYGOS_SCO25"] = np.array([
+#       [40,280],
+#       [370,300],
+#       [590,580],
+#       [150,730]]).astype(np.float32)

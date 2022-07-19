@@ -6,11 +6,15 @@
 import sco_four_points
 import os
 import cv2 as cv
+import numpy as np
 
 #src_folder = r"A:\IsKnown_Images\Selected\Ind-0"
 #src_folder = r"A:\IsKnown_Images\Selected_TimeBarcodeSplit"Selected_TimeBarcodeSplit
-src_folder = r"A:\IsKnown_Images\Selected"
-dst_folder = r"A:\IsKnown_Images\Affine"
+#src_folder = r"A:\IsKnown_Images\Selected"
+#dst_folder = r"A:\IsKnown_Images\Affine"
+
+src_folder = r"A:\IsKnown_Images\Selected_s3"
+dst_folder = r"A:\IsKnown_Images\Affine_S3"
 
 i=0
 
@@ -20,7 +24,12 @@ for sco_lvl in os.listdir(src_folder):
 
     # Original and transformed image locations mapping
     sco_src_pts = sco_four_points.src_pts[sco_lvl]
-    sco_dst_pts = sco_four_points.dst_pts[sco_lvl]
+    #sco_dst_pts = sco_four_points.dst_pts[sco_lvl]
+    sco_dst_pts = np.array( [
+        [  0.,   0.],
+        [255.,   0.],
+        [255., 255.],
+        [  0., 255.]] ).astype(np.float32)
 
     # Affine matrix
     M = cv.getPerspectiveTransform(sco_src_pts, sco_dst_pts)
