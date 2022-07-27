@@ -13,18 +13,18 @@ $barcodes = Import-Csv -Path 'selected.csv' -Header "barcode" | ForEach { $_.bar
 $i=0
 
 # skip files before this date in S3 (instruction: cameras moved)
-Get-ChildItem $source_pattern -Recurse -File | Where {$_.FullName -notlike '*\2022-03-11\*'} |
+Get-ChildItem $source_pattern -Recurse -File | #Where {$_.FullName -notlike '*\2022-03-11\*'} |
 Foreach{ 
     $barcode = $_.FullName.Split('\')[-2]
 
-    #if ( $_.FullName.Split('\')[-3] -like 'SCO*')
-    #{
+    if ( $_.FullName.Split('\')[-3] -like 'SCO*')
+    {
         $store_pos = $_.FullName.Split('\')[-4] + "_" + $_.FullName.Split('\')[-3]
-    #}
-    #else
-    #{
-    #    $store_pos = $_.FullName.Split('\')[-5] + "_" + $_.FullName.Split('\')[-4]
-    #}
+    }
+    else
+    {
+        $store_pos = $_.FullName.Split('\')[-5] + "_" + $_.FullName.Split('\')[-4]
+    }
 
     if ( $barcodes.Contains( $barcode ) ){
 

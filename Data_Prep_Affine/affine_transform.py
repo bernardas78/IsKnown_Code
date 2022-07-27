@@ -20,6 +20,8 @@ i=0
 
 # Loop structure <sco>\<barcode>\*.jpg
 for sco_lvl in os.listdir(src_folder):
+    #if sco_lvl<'VILNIUS_RYGOS_SCO25':
+    #    continue
     sco_lvl_full_folder = os.path.join(src_folder,sco_lvl)
 
     # Original and transformed image locations mapping

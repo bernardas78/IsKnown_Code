@@ -1,5 +1,6 @@
 # Source directory where barcode folders are located
-$images_folder = 'A:\IsKnown_Images\Affine_S3\'
+#$images_folder = 'A:\IsKnown_Images\Affine_S3\'
+$images_folder = 'A:\IsKnown_Images\Affine_EmptyNot\Affine_NotEmpty\'
 
 # Destination directory
 $sets_folder = 'A:\IsKnown_Images\Aff_NE_TrainValTest_S3\'
@@ -46,19 +47,19 @@ $max_files = 2000
                     $actual_test=0
 
                     # copy each file to a proper set's folder
-                    Get-ChildItem $barcode_folder |  # Select-Object -last $max_files |
+                    Get-ChildItem $barcode_folder |  Select-Object -last $max_files |
                         ForEach-Object { 
 
                             #At least one image goes to each set: Train, Val, Test
                             $tot_copied = $actual_train + $actual_val + $actual_test + 1e-7
 
-                            if ($tot_copied -gt $max_files)
-                                {
-                                    $actual_test+=1
-                                    #echo "copy to test"
-                                    $dest_folder = $test_folder
-                                }
-                            ElseIf ($pct_train - $actual_train/$tot_copied -gt $pct_val - $actual_val/$tot_copied -and
+                            #if ($tot_copied -gt $max_files)
+                            #    {
+                            #        $actual_test+=1
+                            #        #echo "copy to test"
+                            #        $dest_folder = $test_folder
+                            #    }
+                            If ($pct_train - $actual_train/$tot_copied -gt $pct_val - $actual_val/$tot_copied -and
                                 $pct_train - $actual_train/$tot_copied -gt $pct_test - $actual_test/$tot_copied)
                                 {
                                     $actual_train+=1

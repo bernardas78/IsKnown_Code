@@ -282,14 +282,20 @@ src_pts["VILNIUS_RYGOS_SCO22"] = np.array([
        [600,580],
        [150,730]]).astype(np.float32)
 
+src_pts["VILNIUS_RYGOS_SCO23"] = np.array([
+       [30,270],
+       [360,280],
+       [600,580],
+       [150,730]]).astype(np.float32)
+
 src_pts["VILNIUS_RYGOS_SCO24"] = np.array([
        [40,280],
        [370,300],
        [590,580],
        [150,730]]).astype(np.float32)
 
-#src_pts["VILNIUS_RYGOS_SCO25"] = np.array([
-#       [40,280],
-#       [370,300],
-#       [590,580],
-#       [150,730]]).astype(np.float32)
+src_pts["VILNIUS_RYGOS_SCO25"] = np.array([
+       [40,280],
+       [370,300],
+       [590,580],
+       [150,730]]).astype(np.float32)

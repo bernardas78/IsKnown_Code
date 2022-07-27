@@ -11,6 +11,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]=str(gpu_id)
 
 model_filename = os.path.join(Glb.results_folder,
                                "model_clsf_from_isVisible_{}.h5".format(date.today().strftime("%Y%m%d")))
+#model_filename = r"A:\IsKnown_Results\model_clsf_from_isVisible_20220725.h5"
 lc_filename = os.path.join(Glb.results_folder,
                            "lc_clsf_from_isVisible_{}.csv".format(date.today().strftime("%Y%m%d") ))
 data_dir = Glb.images_balanced_folder
