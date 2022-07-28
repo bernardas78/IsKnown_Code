@@ -1,6 +1,7 @@
 # Source directory where barcode folders are located
 #$images_folder = 'A:\IsKnown_Images\Affine_S3\'
-$images_folder = 'A:\IsKnown_Images\Affine_EmptyNot\Affine_NotEmpty\'
+#$images_folder = 'A:\IsKnown_Images\Affine_EmptyNot\Affine_NotEmpty\'
+$images_folder = 'A:\IsKnown_Images\Affine_NE_SameMrg\'
 
 # Destination directory
 $sets_folder = 'A:\IsKnown_Images\Aff_NE_TrainValTest_S3\'

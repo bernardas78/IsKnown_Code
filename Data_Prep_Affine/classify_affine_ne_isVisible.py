@@ -30,7 +30,7 @@ dest_folder_invisible = os.path.join(dest_folder_invisible, "{}_v{}")
 #emptynesses = ["Bal", "Overfit", "Siam"]
 emptynesses = ["Bal"]
 #versions = [62,14]
-versions = [14]
+versions = [62]
 
 # model to load from
 model_path_pattern = os.path.join( Glb.class_mixture_models_folder, "model_v{}.h5")

@@ -15,13 +15,13 @@ hier_lvl = 0
 # prodcuts to compare (IDs from IsKnown_Results/SOM_Clstr_Str/Train_15x15_hier0/purity_0.197_[11_3].csv)
 prods=[57,42]
 
-set_name="Test"
-#set_name="Val"
+#set_name="Test"
+set_name="Val"
 
-df_prodnames = pd.read_csv("df_prods_s3_148.csv", header=0)["class"].tolist()
-df_classes = pd.read_csv("df_prods_s3_148.csv", header=0)["class"].tolist()
+df_prodnames = pd.read_csv("../Data_Prep_s3/selected_withNames.csv", header=0)["prod_name"].tolist()
+df_classes = pd.read_csv("../Data_Prep_s3/selected_withNames.csv", header=0)["class"].tolist()
 
-model_filename = r"A:\IsKnown_Results\model_clsf_from_isVisible_20220719.h5"
+model_filename = r"A:\IsKnown_Results\model_clsf_from_isVisible_20220727.h5"
 model = load_model(model_filename)
 
 data_folder = os.path.join(r"C:\IsKnown_Images_IsVisible", set_name)
