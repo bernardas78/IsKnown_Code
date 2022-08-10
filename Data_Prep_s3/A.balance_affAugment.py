@@ -11,7 +11,7 @@ import numpy as np
 from affSequence import affSequence
 import math
 
-glb_aff_variation=10
+glb_aff_variation=20
 
 #src_folder = r"A:\IsKnown_Images\A_Hier"
 src_folder = r"A:\IsKnown_Images\Aff_NE_TrainValTest_S3"

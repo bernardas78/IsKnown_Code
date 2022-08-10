@@ -1,7 +1,7 @@
 # Source directory where barcode folders are located
 #$images_folder = 'A:\IsKnown_Images\Affine_S3\'
-#$images_folder = 'A:\IsKnown_Images\Affine_EmptyNot\Affine_NotEmpty\'
-$images_folder = 'A:\IsKnown_Images\Affine_NE_SameMrg\'
+$images_folder = 'A:\IsKnown_Images\Affine_EmptyNot\Affine_NotEmpty\'
+#$images_folder = 'A:\IsKnown_Images\Affine_NE_SameMrg\'
 
 # Destination directory
 $sets_folder = 'A:\IsKnown_Images\Aff_NE_TrainValTest_S3\'
@@ -10,7 +10,7 @@ $pct_train=0.64
 $pct_val=0.16
 $pct_test=0.2
 
-$max_files = 2000
+$max_files = 3000
 
 # Expected structure: Cleaned_AutoVisible\barcode\*.jpg
 
