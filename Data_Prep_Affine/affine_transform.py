@@ -14,7 +14,9 @@ import numpy as np
 #dst_folder = r"A:\IsKnown_Images\Affine"
 
 src_folder = r"A:\IsKnown_Images\Selected_s3"
+#src_folder = r"A:\RetellectImages\Selected_s3"
 dst_folder = r"A:\IsKnown_Images\Affine_S3"
+#dst_folder = r"A:\RetellectImages\Images.AffineTrnsfrm"
 
 i=0
 

@@ -8,7 +8,7 @@ def train_on_single_gpu (gpu_id, model_filename, lc_filename, data_dir):
     end_version = 60
 
     # whether to load an existing model file
-    load_existing = False
+    load_existing = True
 
     # Network architecture
     architecture_dic = [ *np.repeat("Model_6classes_c4_d3_v1", 28).tolist(), # v<=28
@@ -87,7 +87,7 @@ def train_on_single_gpu (gpu_id, model_filename, lc_filename, data_dir):
     }
 
     for i in np.arange(start_version,end_version+1):
-        params_dict = {"epochs": 100,
+        params_dict = {"epochs": 00,
                        "bn_layers": bn_layers_list[i] if i in bn_layers_list else bn_layers_list["default"],
                        "dropout_layers": dropout_layers_list[i] if i in dropout_layers_list else [],
                        "l2_layers": l2_layers_list[i] if i in l2_layers_list else {},

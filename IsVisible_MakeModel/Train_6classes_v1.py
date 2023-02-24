@@ -88,7 +88,7 @@ def trainModel(epochs,bn_layers, dropout_layers, l2_layers,
 
     print (model.summary())
 
-    callback_earlystop = EarlyStopping(monitor='val_accuracy', min_delta=0.0001, patience=10, verbose=1, mode='max',
+    callback_earlystop = EarlyStopping(monitor='val_accuracy', min_delta=0.0001, patience=5, verbose=1, mode='max',
                                            restore_best_weights=True)
     callback_csv_logger = CSVLogger(lc_filename, separator=",", append=False)
 
