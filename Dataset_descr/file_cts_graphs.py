@@ -12,12 +12,24 @@ cat_bc = {
     "23": "22_23"
 }
 
-cat_names = {
+cat_names_EN = {
     "18": "Fresh Fruits and Vegetables",
     "19": "Dried Fruits and Nuts",
     "21": "Candies",
-    "22_23": "Buns, Donuts, Bisquits"
+    "22_23": "Buns, Doughnuts, Bisquits"
 }
+
+cat_names_LT = {
+    "18": "Švieži vaisiai ir daržovės",
+    "19": "Džiovinti vaisiai ir riešutai",
+    "21": "Saldainiai",
+    "22_23": "Bandelės, spurgos, sausainiai"
+}
+
+#language = "LT"
+language = "EN"
+
+cat_names = cat_names_EN if language=="EN" else cat_names_LT
 
 prod_bc_left2 = [ str(bc)[:2] for bc in df_prods.barcode ]
 prod_cat_bc = [ cat_bc[bc_left2] for bc_left2 in prod_bc_left2]
@@ -29,11 +41,15 @@ df_prods_cnt_catname_grouped = df_prods_cnt_catname.groupby('prod_cat_names').ag
 file_cnt_bycat = df_prods_cnt_catname_grouped.filecnt.tolist()
 cat_names_bycat = df_prods_cnt_catname_grouped.index.tolist()
 
-plt.pie(file_cnt_bycat, labels=cat_names_bycat, autopct=lambda pct:r"{:.1f}%".format(pct) if pct>2.4 else "", shadow=True, startangle=90,  labeldistance=None)
-plt.title ("Image count by category", fontdict={'fontname':'calibri', 'fontsize':16})
-plt.legend(loc=[1.0,0])
+
+title = "Image count by product group" if language=="EN" else "Vaizdų skaičius pagal prekių grupę"
+
+plt.pie(file_cnt_bycat, labels=cat_names_bycat, autopct=lambda pct:r"{:.1f}%".format(pct) if pct>2.4 else "", shadow=True, startangle=90,  labeldistance=None,
+        textprops={'fontsize': 14})
+plt.title (title, fontdict={'fontname':'calibri', 'fontsize':20})
+plt.legend(loc=[1.0,0], fontsize=12)
 plt.tight_layout()
-plt.savefig('filecnt_by_cat.pdf', bbox_inches='tight')
+plt.savefig('filecnt_by_cat_{}.pdf'.format(language), bbox_inches='tight')
 plt.close()
 
 # categories products count
@@ -41,10 +57,13 @@ df_prods_bcs_catname_grouped = df_prods.groupby('prod_cat_names').agg(['count','
 bc_cnt_bycat = df_prods_bcs_catname_grouped.barcode["count"].tolist()
 cat_names_bycat = df_prods_bcs_catname_grouped.index.tolist()
 
-plt.pie(bc_cnt_bycat, labels=cat_names_bycat, autopct=lambda pct:r"{:.1f}%".format(pct) if pct>2.4 else "", shadow=True, startangle=90,  labeldistance=None)
+title = "Product count by product group" if language=="EN" else "Prekių skaičius pagal prekių grupę"
+
+plt.pie(bc_cnt_bycat, labels=cat_names_bycat, autopct=lambda pct:r"{:.1f}%".format(pct) if pct>2.4 else "", shadow=True, startangle=90,  labeldistance=None,
+        textprops={'fontsize': 14})
 plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
-plt.title ("Product count by category", fontdict={'fontname':'calibri', 'fontsize':16})
+plt.title (title, fontdict={'fontname':'calibri', 'fontsize':20})
 #plt.legend(loc=[0.8,0])
 plt.tight_layout()
-plt.savefig('bccnt_by_cat.pdf', bbox_inches='tight')
+plt.savefig('bccnt_by_cat_{}.pdf'.format(language), bbox_inches='tight')
 plt.close()

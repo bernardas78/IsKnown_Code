@@ -1,6 +1,7 @@
 import matplotlib
 from matplotlib import pyplot as plt
 import pandas as pd
+import numpy as np
 
 lst_test_accs = []
 lst_x_labels = []
@@ -35,9 +36,13 @@ lst_x_labels.append ( "Empty\nRemoved" )
 
 matplotlib.rc('font', family='calibri')
 plt.boxplot (lst_test_accs, labels=lst_x_labels )
-plt.tick_params(axis='both', which='major', labelsize=16)
+plt.tick_params(axis='both', which='major', labelsize=20)
+
+yticks = np.arange(0.76, 0.84, 0.01)
+plt.yticks(ticks=yticks, labels=[ "{:.2f}".format(ytick) for ytick in yticks])
+
 #plt.xticks(ticks=(np.arange(len(lst_x_labels)))+1, labels=lst_x_labels, rotation=90)
-plt.title ("Test accuracy, ablation study", fontdict={'fontname':'calibri', 'fontsize':20})
+plt.title ("Test accuracy, ablation study", fontdict={'fontname':'calibri', 'fontsize':24})
 #legend = plt.legend(["Q1: <1/4 product area visibility", "BagR: plastic bags with high glare"], loc='lower left', handlelength=0)
 #plt.ylabel("Test Accuracy")
 plt.tight_layout()

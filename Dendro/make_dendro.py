@@ -63,24 +63,32 @@ dn = dendrogram(Z=clstrs, leaf_label_func=llf, p=50, truncate_mode='lastp',orien
 plt.savefig("dendro_last50.png")
 plt.close()
 
+language="LT"
+#language="EN"
+
+xlabel = "Image count in class (All)" if language=="EN" else "Vaizdų kiekis visose klasėse"
+ylabel = "Number of classes" if language=="EN" else "Klasių skaičius"
 
 plt.hist(df_prods["Cnt"], bins=100)
-plt.tick_params(axis='both', which='major', labelsize=14)
-plt.title ("Image counts in classes (All)", fontdict={'fontname':'calibri', 'fontsize':16})
-plt.xlabel("Image count in class", fontdict={'fontname':'calibri', 'fontsize':16})
-plt.ylabel("Number of classes", fontdict={'fontname':'calibri', 'fontsize':16})
+plt.tick_params(axis='both', which='major', labelsize=16)
+#plt.title ("Image counts in classes (All)", fontdict={'fontname':'calibri', 'fontsize':18})
+plt.xlabel(xlabel, fontdict={'fontname':'calibri', 'fontsize':20})
+plt.ylabel(ylabel, fontdict={'fontname':'calibri', 'fontsize':20})
 plt.tight_layout()
-plt.savefig("hist_prekiuFreq.pdf")
+plt.savefig("hist_prekiuFreq_{}.pdf".format(language))
 #plt.show()
 plt.close()
 
+xlabel = "Image count in class (<100 images/class)" if language=="EN" else "Vaizdų kiekis klasėse (<100 vaizdų klasėje)"
+ylabel = "Number of classes" if language=="EN" else "Klasių skaičius"
+
 cnts_less_100 = df_prods["Cnt"] [ df_prods["Cnt"] <100 ]
 plt.hist(cnts_less_100, bins=100, color='red')
-plt.tick_params(axis='both', which='major', labelsize=14)
-plt.title ("Image counts in classes (<100 images/class)", fontdict={'fontname':'calibri', 'fontsize':16} )
-plt.xlabel("Image count in class", fontdict={'fontname':'calibri', 'fontsize':16})
-plt.ylabel("Number of classes", fontdict={'fontname':'calibri', 'fontsize':16})
+plt.tick_params(axis='both', which='major', labelsize=16)
+#plt.title ("Image counts in classes (<100 images/class)", fontdict={'fontname':'calibri', 'fontsize':18} )
+plt.xlabel(xlabel, fontdict={'fontname':'calibri', 'fontsize':20})
+plt.ylabel(ylabel, fontdict={'fontname':'calibri', 'fontsize':20})
 plt.tight_layout()
-plt.savefig("hist_prekiuFreq_less100.pdf")
+plt.savefig("hist_prekiuFreq_less100_{}.pdf".format(language))
 #plt.show()
 plt.close()

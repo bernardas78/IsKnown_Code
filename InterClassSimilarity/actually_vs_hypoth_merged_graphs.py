@@ -8,7 +8,7 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 
-do_include_bc_structure=False
+do_include_bc_structure=True
 
 # read Actually merged results file
 column_names = ["gpu","datetime","data_dir","test_acc","test_f1"]
@@ -46,40 +46,55 @@ bc_structure_f1 = [0.5539615212579857,
                    0.5619988851741187,
                    0.9504490578900224]
 
+language="LT"
+#language="EN"
+
+lbl_embedingsdist = "Embeddings distance" if language=='EN' else "Atstumas tarp aktyvacijų"
+lbl_errorcontr = "Error contribution" if language=='EN' else "Klaidų įnašas"
+lbl_sompurity = "SOM purity" if language=='EN' else "SOM grynumas"
+lbl_barcodestructure = "Barcode hierarchy" if language=='EN' else "Hierarchija pagal brūkšninį kodą"
 
 ############ ACCURACY GRAPH
+xlabel = "Number of classes" if language=='EN' else "Klasių skaičius"
+ylabel = "Accuracy" if language=='EN' else "Tikslumas"
+title = "Accuracy by merging classes" if language=='EN' else "Tikslumas suliejant klases"
+
 # Actual
 plt.scatter (x=class_counts, y=accuracy, c=colors)
 # Hypothetical
 x = class_cnt
-plt.plot(x, hypot_acc_emb_dist, label="Embeddings distance", color=color_codes[labels.index('emb_dist')] )
-plt.plot(x, hypot_acc_conf_mat, label="Error contribution", color=color_codes[labels.index('conf_mat')])
-plt.plot(x, hypot_acc_purity_impr, label="SOM purity", color=color_codes[labels.index('som_purity_impr')])
+plt.plot(x, hypot_acc_emb_dist, label=lbl_embedingsdist, color=color_codes[labels.index('emb_dist')] )
+plt.plot(x, hypot_acc_conf_mat, label=lbl_errorcontr, color=color_codes[labels.index('conf_mat')])
+plt.plot(x, hypot_acc_purity_impr, label=lbl_sompurity, color=color_codes[labels.index('som_purity_impr')])
 if do_include_bc_structure:
-    plt.plot(bc_structure_cnt_classes, bc_structure_acc, label="Barcode hierarchy", color="red")
-plt.xlabel("Number of classes")
-plt.ylabel("Accuracy")
+    plt.plot(bc_structure_cnt_classes, bc_structure_acc, label=lbl_barcodestructure, color="red")
+plt.xlabel(xlabel)
+plt.ylabel(ylabel)
 plt.legend(loc="upper right")
-plt.title("Accuracy by merging classes")
+plt.title(title)
 #plt.show()
-plt.savefig('actual_vs_hypth_merged_acc{}.jpg'.format("_inclBcHier" if do_include_bc_structure else ""))
+plt.savefig('actual_vs_hypth_merged_acc{}_{}.pdf'.format("_inclBcHier" if do_include_bc_structure else "", language))
 plt.close()
 
 
 ############ F_SCORE GRAPH
+xlabel = "Number of classes" if language=='EN' else "Klasių skaičius"
+ylabel = "F-score" if language=='EN' else "F-rodiklis"
+title = "F-score by merging classes" if language=='EN' else "F-rodiklis suliejant klases"
+
 # Actual
 plt.scatter (x=class_counts, y=f_1, c=colors)
 # Hypothetical
 x = class_cnt
-plt.plot(x, hypot_f1_emb_dist, label="Embeddings distance", color=color_codes[labels.index('emb_dist')] )
-plt.plot(x, hypot_f1_conf_mat, label="Error contribution", color=color_codes[labels.index('conf_mat')])
-plt.plot(x, hypot_f1_purity_impr, label="SOM purity", color=color_codes[labels.index('som_purity_impr')])
+plt.plot(x, hypot_f1_emb_dist, label=lbl_embedingsdist, color=color_codes[labels.index('emb_dist')] )
+plt.plot(x, hypot_f1_conf_mat, label=lbl_errorcontr, color=color_codes[labels.index('conf_mat')])
+plt.plot(x, hypot_f1_purity_impr, label=lbl_sompurity, color=color_codes[labels.index('som_purity_impr')])
 if do_include_bc_structure:
-    plt.plot(bc_structure_cnt_classes, bc_structure_f1, label="Barcode hierarchy", color="red")
-plt.xlabel("Number of classes")
-plt.ylabel("F-score")
+    plt.plot(bc_structure_cnt_classes, bc_structure_f1, label=lbl_barcodestructure, color="red")
+plt.xlabel(xlabel)
+plt.ylabel(ylabel)
 plt.legend(loc="upper right")
-plt.title("F-score by merging classes")
+plt.title(title)
 #plt.show()
-plt.savefig('actual_vs_hypth_merged_f1{}.jpg'.format("_inclBcHier" if do_include_bc_structure else ""))
+plt.savefig('actual_vs_hypth_merged_f1{}_{}.pdf'.format("_inclBcHier" if do_include_bc_structure else "", language))
 plt.close()

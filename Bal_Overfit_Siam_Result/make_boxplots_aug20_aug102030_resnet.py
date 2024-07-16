@@ -16,9 +16,9 @@ for aug_version in np.unique( df_metrics.aug_version):
 
 matplotlib.rc('font', family='calibri')
 plt.boxplot (lst_test_accs)
-plt.tick_params(axis='both', which='major', labelsize=16)
+plt.tick_params(axis='both', which='major', labelsize=20)
 plt.xticks(ticks=(np.arange(len(lst_x_labels)))+1, labels=lst_x_labels, rotation=90)
-plt.title ("Test accuracy ~ Affine augmentation parameters", fontdict={'fontname':'calibri', 'fontsize':18})
+plt.title ("Test acc. by affine augmentation parameters", fontdict={'fontname':'calibri', 'fontsize':23})
 #plt.ylabel("Test Accuracy")
 plt.tight_layout()
 plt.savefig("testacc_aug.pdf")
